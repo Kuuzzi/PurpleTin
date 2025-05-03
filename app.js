@@ -176,31 +176,26 @@ function createSearchBar() {
   input.type = 'search';
   input.placeholder = `Search ${currentCategory.name}...`;
   input.setAttribute('aria-label', `Search ${currentCategory.name} items`);
-  input.style.width = '300px';
-  input.style.maxWidth = '90%';
-  input.style.padding = '0.5rem 1rem';
-  input.style.borderRadius = '12px';
+  input.style.width = '360px';
+  input.style.maxWidth = '95%';
+  input.style.padding = '0.7rem 1.2rem';
+  input.style.borderRadius = '16px';
   input.style.border = 'none';
-  input.style.fontSize = '1rem';
-  input.style.boxShadow = '0 0 10px #7b2ff7aa';
-  input.style.transition = 'box-shadow 0.3s ease';
-  input.value = currentSearchTerm;
+  input.style.fontSize = '1.2rem';
+  input.style.boxShadow = '0 0 14px #7B2FF7cc';
+  input.style.transition = 'box-shadow 0.3s ease, background-color 0.3s ease';
+  input.style.fontWeight = '700';
+  input.style.fontFamily = "'Montserrat', sans-serif";
+  input.style.letterSpacing = '0.04em';
+  input.style.color = '#21004c';
 
-  input.addEventListener('focus', () => {
-    input.style.boxShadow = '0 0 18px #b987f9cc';
-  });
-  input.addEventListener('blur', () => {
-    input.style.boxShadow = '0 0 10px #7b2ff7aa';
-  });
-
-  let debounceTimer;
-  input.addEventListener('input', () => {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(async () => {
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
       currentSearchTerm = input.value.trim();
       currentPage = 1;
-      await renderCategoryItems();
-    }, 500);
+      renderCategoryItems();
+    }
   });
 
   wrapper.appendChild(input);
