@@ -1,9 +1,11 @@
-const apiKey = 'b139bc417606842811f1526ae92572bc'; // <-- Replace with your TMDb API key
+const apiKey = 'b139bc417606842811f1526ae92572bc'; // Replace with your TMDb API key
 const baseUrl = 'https://api.themoviedb.org/3';
 const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
 
 const mainContent = document.getElementById('main-content');
 const navCategories = document.getElementById('nav-categories');
+
+const ITEMS_PER_PAGE = 8;
 
 const categories = [
   {
@@ -60,7 +62,9 @@ const categories = [
   }
 ];
 
-// Utility function to fetch JSON and handle errors
+let currentCategory = null;
+let currentPage = 1;
+
 async function fetchJSON(url) {
   try {
     const res = await fetch(url);
@@ -72,21 +76,17 @@ async function fetchJSON(url) {
   }
 }
 
-// Combine movie & TV results for categories that have both
 function combineResults(movieData, tvData) {
   const movies = movieData?.results?.map(item => ({ ...item, media_type: 'movie' })) || [];
   const tvs = tvData?.results?.map(item => ({ ...item, media_type: 'tv' })) || [];
   const combined = [...movies, ...tvs];
-  // Return up to 20 combined items
-  return combined.slice(0, 20);
+  return combined.slice(0, 50);  // Fetch first 50 items to paginate
 }
 
-// Fetch all category data and store in categories[].items
 async function fetchAllCategoriesData() {
   for (const category of categories) {
     try {
       if (category.fetchUrlMovie && category.fetchUrlTV) {
-        // Categories with both movie and TV fetch URLs (anime, cartoons, manga)
         const [movieData, tvData] = await Promise.all([
           fetchJSON(category.fetchUrlMovie),
           fetchJSON(category.fetchUrlTV)
@@ -97,9 +97,8 @@ async function fetchAllCategoriesData() {
           category.items = [];
         }
       } else if (category.fetchUrl) {
-        // Categories with single fetch URL
         const data = await fetchJSON(category.fetchUrl);
-        category.items = data?.results?.slice(0, 20) || [];
+        category.items = data?.results?.slice(0, 50) || [];
       } else {
         category.items = [];
       }
@@ -110,7 +109,6 @@ async function fetchAllCategoriesData() {
   }
 }
 
-// Render categories grid on page load
 function renderCategories() {
   mainContent.innerHTML = '';
   const container = document.createElement('div');
@@ -128,6 +126,8 @@ function renderCategories() {
     `;
 
     card.addEventListener('click', () => {
+      currentCategory = category;
+      currentPage = 1;
       renderCategoryItems(category);
     });
 
@@ -145,7 +145,60 @@ function renderCategories() {
   mainContent.focus();
 }
 
-// Render items of a selected category
+function renderPaginationControls(totalPages) {
+  const pagination = document.createElement('div');
+  pagination.classList.add('pagination-controls');
+  pagination.style.textAlign = 'center';
+  pagination.style.marginTop = '2rem';
+  pagination.style.userSelect = 'none';
+
+  const prevBtn = document.createElement('button');
+  prevBtn.textContent = '← Prev';
+  prevBtn.disabled = currentPage === 1;
+  prevBtn.style.marginRight = '1rem';
+  prevBtn.style.padding = '0.5rem 1rem';
+  prevBtn.style.background = '#7B2FF7';
+  prevBtn.style.color = '#fff';
+  prevBtn.style.border = 'none';
+  prevBtn.style.borderRadius = '8px';
+  prevBtn.style.cursor = prevBtn.disabled ? 'not-allowed' : 'pointer';
+  prevBtn.addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderCategoryItems(currentCategory);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+
+  const nextBtn = document.createElement('button');
+  nextBtn.textContent = 'Next →';
+  nextBtn.disabled = currentPage >= totalPages;
+  nextBtn.style.padding = '0.5rem 1rem';
+  nextBtn.style.background = '#7B2FF7';
+  nextBtn.style.color = '#fff';
+  nextBtn.style.border = 'none';
+  nextBtn.style.borderRadius = '8px';
+  nextBtn.style.cursor = nextBtn.disabled ? 'not-allowed' : 'pointer';
+  nextBtn.addEventListener('click', () => {
+    if (currentPage < totalPages) {
+      currentPage++;
+      renderCategoryItems(currentCategory);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+
+  const pageIndicator = document.createElement('span');
+  pageIndicator.textContent = `Page ${currentPage} of ${totalPages}`;
+  pageIndicator.style.color = '#d9d6ff';
+  pageIndicator.style.fontWeight = '700';
+
+  pagination.appendChild(prevBtn);
+  pagination.appendChild(pageIndicator);
+  pagination.appendChild(nextBtn);
+
+  return pagination;
+}
+
 function renderCategoryItems(category) {
   mainContent.innerHTML = '';
 
@@ -155,6 +208,8 @@ function renderCategoryItems(category) {
   backBtn.classList.add('back-button');
   backBtn.textContent = '← Back to Categories';
   backBtn.addEventListener('click', () => {
+    currentCategory = null;
+    currentPage = 1;
     renderCategories();
   });
   backBtn.addEventListener('keypress', e => {
@@ -166,7 +221,7 @@ function renderCategoryItems(category) {
 
   mainContent.appendChild(backBtn);
 
-  // Category title
+  // Title
   const title = document.createElement('h2');
   title.textContent = category.name;
   mainContent.appendChild(title);
@@ -181,11 +236,14 @@ function renderCategoryItems(category) {
     return;
   }
 
-  // Items grid
+  const totalPages = Math.ceil(category.items.length / ITEMS_PER_PAGE);
+  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+  const pageItems = category.items.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+
   const itemsGrid = document.createElement('div');
   itemsGrid.classList.add('items-grid');
 
-  category.items.forEach(item => {
+  pageItems.forEach(item => {
     const titleText = item.title || item.name || 'Untitled';
     const posterPath = item.poster_path ? imageBaseUrl + item.poster_path : 'https://via.placeholder.com/300x450?text=No+Image';
     const itemCard = document.createElement('article');
@@ -193,6 +251,7 @@ function renderCategoryItems(category) {
     itemCard.tabIndex = 0;
     itemCard.setAttribute('aria-label', `Watch ${titleText}`);
 
+    // <-- The part you requested repeated starts here:
     itemCard.innerHTML = `
       <img src="${posterPath}" alt="Poster of ${titleText}" loading="lazy" />
       <div class="item-info">
@@ -200,13 +259,13 @@ function renderCategoryItems(category) {
         <button type="button" aria-label="Watch ${titleText}">Watch Now</button>
       </div>
     `;
+    // <-- ends here.
 
     const watchBtn = itemCard.querySelector('button');
     watchBtn.addEventListener('click', () => {
       alert(`Streaming "${titleText}" coming soon on PurpleTin!`);
     });
 
-    // Allow keyboard Enter or Space on entire item card to trigger watch
     itemCard.addEventListener('keypress', e => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -218,24 +277,29 @@ function renderCategoryItems(category) {
   });
 
   mainContent.appendChild(itemsGrid);
+
+  // Add pagination controls if more than 1 page
+  if (totalPages > 1) {
+    const paginationControls = renderPaginationControls(totalPages);
+    mainContent.appendChild(paginationControls);
+  }
+
   mainContent.focus();
 }
 
-// Show loading indicator while fetching
+// Show loading indicator
 function showLoading(show = true) {
   if (show) {
     mainContent.innerHTML = `<p class="loading">Loading categories...</p>`;
   }
 }
 
-// Initialization on DOM load
 document.addEventListener('DOMContentLoaded', async () => {
   showLoading(true);
   await fetchAllCategoriesData();
-  renderCategories();  
+  renderCategories();
 });
 
-// Nav link to categories (in header)
 navCategories.addEventListener('click', e => {
   e.preventDefault();
   renderCategories();
