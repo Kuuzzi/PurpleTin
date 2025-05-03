@@ -1,4 +1,4 @@
-const apiKey = 'b139bc417606842811f1526ae92572bc'; // <-- Your TMDb API key
+const apiKey = 'b139bc417606842811f1526ae92572bc'; // Your TMDb API key
 const baseUrl = 'https://api.themoviedb.org/3';
 const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
 const mainContent = document.getElementById('main-content');
@@ -10,53 +10,56 @@ const categories = [
     id: 'anime',
     name: 'Anime',
     description: 'Action-packed and heartwarming Japanese animations.',
-    fetchUrlMovie: `${baseUrl}/discover/movie?api_key=${apiKey}&with_genres=16&with_keywords=210024&language=en-US&sort_by=popularity.desc&page=1`,
-    fetchUrlTV: `${baseUrl}/discover/tv?api_key=${apiKey}&with_genres=16&with_keywords=210024&language=en-US&sort_by=popularity.desc&page=1`,
-    items: []
+    genreId: 16,
+    keywordId: 210024, // "anime" keyword id
+    items: [],
+    type: ['movie', 'tv']
   },
   {
     id: 'movies',
     name: 'Movies',
     description: 'Blockbuster hits and timeless classics around the world.',
-    fetchUrl: `${baseUrl}/discover/movie?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&page=1`,
-    items: []
+    items: [],
+    type: ['movie']
   },
   {
     id: 'tagalog-movies',
     name: 'Tagalog Movies',
     description: 'Experience Filipino culture through featured Tagalog films.',
-    fetchUrl: `${baseUrl}/discover/movie?api_key=${apiKey}&with_original_language=tl&language=en-US&sort_by=popularity.desc&page=1`,
-    items: []
+    originalLanguage: 'tl',
+    items: [],
+    type: ['movie']
   },
   {
     id: 'tvshow',
     name: 'TV Show',
     description: 'Binge-worthy series and captivating stories.',
-    fetchUrl: `${baseUrl}/discover/tv?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&page=1`,
-    items: []
+    items: [],
+    type: ['tv']
   },
   {
     id: 'cartoons',
     name: 'Cartoons',
     description: 'Fun, humor, and nostalgia for all ages.',
-    fetchUrlMovie: `${baseUrl}/discover/movie?api_key=${apiKey}&with_genres=16&language=en-US&sort_by=popularity.desc&page=1`,
-    fetchUrlTV: `${baseUrl}/discover/tv?api_key=${apiKey}&with_genres=16&language=en-US&sort_by=popularity.desc&page=1`,
-    items: []
+    genreId: 16,
+    items: [],
+    type: ['movie', 'tv']
   },
   {
     id: 'manga',
     name: 'Manga',
     description: 'Top manga-inspired titles across movies and TV.',
-    fetchUrlMovie: `${baseUrl}/discover/movie?api_key=${apiKey}&with_keywords=31622&language=en-US&sort_by=popularity.desc&page=1`,
-    fetchUrlTV: `${baseUrl}/discover/tv?api_key=${apiKey}&with_keywords=31622&language=en-US&sort_by=popularity.desc&page=1`,
-    items: []
+    keywordId: 31622, // "manga" keyword id
+    items: [],
+    type: ['movie', 'tv']
   },
   {
     id: 'kdrama',
     name: 'Kdrama',
     description: 'Romance, suspense, and more from Korean dramas.',
-    fetchUrl: `${baseUrl}/discover/tv?api_key=${apiKey}&with_original_language=ko&language=en-US&sort_by=popularity.desc&page=1`,
-    items: []
+    originalLanguage: 'ko',
+    items: [],
+    type: ['tv']
   }
 ];
 
@@ -79,27 +82,49 @@ async function fetchJSON(url) {
 function combineResults(movieData, tvData) {
   const movies = movieData?.results?.map(item => ({ ...item, media_type: 'movie' })) || [];
   const tvs = tvData?.results?.map(item => ({ ...item, media_type: 'tv' })) || [];
-  return [...movies, ...tvs].slice(0, 50);
+  return [...movies, ...tvs];
 }
 
+// For static initial fetch
 async function fetchAllCategoriesData() {
   for (const category of categories) {
     try {
-      if (category.fetchUrlMovie && category.fetchUrlTV) {
-        const [movieData, tvData] = await Promise.all([
-          fetchJSON(category.fetchUrlMovie),
-          fetchJSON(category.fetchUrlTV),
-        ]);
-        if (movieData || tvData) {
-          category.items = combineResults(movieData, tvData);
-        } else {
-          category.items = [];
+      if (category.type.includes('movie') && category.type.includes('tv')) {
+        // Fetch movies and tv for categories like anime/manga/cartoons
+        let movieUrl = `${baseUrl}/discover/movie?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&page=1`;
+        let tvUrl = `${baseUrl}/discover/tv?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&page=1`;
+        
+        if(category.genreId) {
+          movieUrl += `&with_genres=${category.genreId}`;
+          tvUrl += `&with_genres=${category.genreId}`;
         }
-      } else if (category.fetchUrl) {
-        const data = await fetchJSON(category.fetchUrl);
-        category.items = data?.results?.slice(0, 50) || [];
+        if(category.keywordId) {
+          movieUrl += `&with_keywords=${category.keywordId}`;
+          tvUrl += `&with_keywords=${category.keywordId}`;
+        }
+        if(category.originalLanguage) {
+          movieUrl += `&with_original_language=${category.originalLanguage}`;
+          tvUrl += `&with_original_language=${category.originalLanguage}`;
+        }
+        
+        const [movieData, tvData] = await Promise.all([fetchJSON(movieUrl), fetchJSON(tvUrl)]);
+        category.items = combineResults(movieData, tvData).slice(0, 50);
       } else {
-        category.items = [];
+        // Single type - either movie or tv only
+        let url = `${baseUrl}/discover/${category.type[0]}?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&page=1`;
+        
+        if(category.genreId) {
+          url += `&with_genres=${category.genreId}`;
+        }
+        if(category.keywordId) {
+          url += `&with_keywords=${category.keywordId}`;
+        }
+        if(category.originalLanguage) {
+          url += `&with_original_language=${category.originalLanguage}`;
+        }
+        
+        const data = await fetchJSON(url);
+        category.items = data?.results?.slice(0, 50) || [];
       }
     } catch (e) {
       console.error(`Error fetching category ${category.name}:`, e);
@@ -108,6 +133,49 @@ async function fetchAllCategoriesData() {
   }
 }
 
+// Construct search URLs by category and query
+function getSearchUrls(category, query, page=1) {
+  const urls = [];
+  const encodedQuery = encodeURIComponent(query);
+  
+  // Construct separate URLs for movies and tv if needed
+  if(category.type.includes('movie')) {
+    let movieUrl = `${baseUrl}/search/movie?api_key=${apiKey}&query=${encodedQuery}&page=${page}&language=en-US`;
+    if(category.genreId) movieUrl += `&with_genres=${category.genreId}`;
+    if(category.keywordId) movieUrl += `&with_keywords=${category.keywordId}`;
+    if(category.originalLanguage) movieUrl += `&with_original_language=${category.originalLanguage}`;
+    urls.push(movieUrl);
+  }
+  if(category.type.includes('tv')) {
+    let tvUrl = `${baseUrl}/search/tv?api_key=${apiKey}&query=${encodedQuery}&page=${page}&language=en-US`;
+    if(category.genreId) tvUrl += `&with_genres=${category.genreId}`;
+    if(category.keywordId) tvUrl += `&with_keywords=${category.keywordId}`;
+    if(category.originalLanguage) tvUrl += `&with_original_language=${category.originalLanguage}`;
+    urls.push(tvUrl);
+  }
+  return urls;
+}
+
+// Search TMDb in the current category based on search term and page
+async function searchCategoryItems(category, searchTerm, page=1) {
+  if (!searchTerm) return category.items;
+
+  const urls = getSearchUrls(category, searchTerm, page);
+
+  const [movieData, tvData] = await Promise.all(urls.map(url => fetchJSON(url)));
+
+  // Combine the results properly, limit to 50 per page approx
+  const results = combineResults(movieData, tvData);
+
+  // Assume total results based on movie data or tv data (sum)
+  let totalResults = 0;
+  if (movieData?.total_results) totalResults += movieData.total_results;
+  if (tvData?.total_results) totalResults += tvData.total_results;
+
+  return { results, totalResults };
+}
+
+// Create search bar element
 function createSearchBar() {
   const wrapper = document.createElement('div');
   wrapper.classList.add('search-bar-container');
@@ -138,26 +206,18 @@ function createSearchBar() {
   let debounceTimer;
   input.addEventListener('input', () => {
     clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-      currentSearchTerm = input.value.trim().toLowerCase();
-
-      if (!currentSearchTerm) {
-        filteredItems = currentCategory.items;
-      } else {
-        filteredItems = currentCategory.items.filter(item => {
-          const title = (item.title || item.name || '').toLowerCase();
-          return title.includes(currentSearchTerm);
-        });
-      }
+    debounceTimer = setTimeout(async () => {
+      currentSearchTerm = input.value.trim();
       currentPage = 1;
-      renderCategoryItems(false);
-    }, 300);
+      await renderCategoryItems();
+    }, 500);
   });
 
   wrapper.appendChild(input);
   return wrapper;
 }
 
+// Render pagination controls
 function renderPaginationControls(totalPages) {
   const pagination = document.createElement('div');
   pagination.classList.add('pagination-controls');
@@ -175,10 +235,11 @@ function renderPaginationControls(totalPages) {
   prevBtn.style.border = 'none';
   prevBtn.style.borderRadius = '8px';
   prevBtn.style.cursor = prevBtn.disabled ? 'not-allowed' : 'pointer';
-  prevBtn.addEventListener('click', () => {
+
+  prevBtn.addEventListener('click', async () => {
     if (currentPage > 1) {
       currentPage--;
-      renderCategoryItems();
+      await renderCategoryItems();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   });
@@ -192,10 +253,11 @@ function renderPaginationControls(totalPages) {
   nextBtn.style.border = 'none';
   nextBtn.style.borderRadius = '8px';
   nextBtn.style.cursor = nextBtn.disabled ? 'not-allowed' : 'pointer';
-  nextBtn.addEventListener('click', () => {
+
+  nextBtn.addEventListener('click', async () => {
     if (currentPage < totalPages) {
       currentPage++;
-      renderCategoryItems();
+      await renderCategoryItems();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   });
@@ -212,10 +274,9 @@ function renderPaginationControls(totalPages) {
   return pagination;
 }
 
-function renderCategoryItems(isInitialRender = true) {
-  const category = currentCategory;
-  if (!category) return;
-
+// Render items for currentCategory using currentSearchTerm and currentPage
+async function renderCategoryItems() {
+  if (!currentCategory) return;
   mainContent.innerHTML = '';
 
   // Back button
@@ -226,8 +287,8 @@ function renderCategoryItems(isInitialRender = true) {
   backBtn.addEventListener('click', () => {
     currentCategory = null;
     currentPage = 1;
-    filteredItems = [];
     currentSearchTerm = '';
+    filteredItems = [];
     renderCategories();
   });
   backBtn.addEventListener('keypress', e => {
@@ -240,12 +301,40 @@ function renderCategoryItems(isInitialRender = true) {
 
   // Title
   const title = document.createElement('h2');
-  title.textContent = category.name;
+  title.textContent = currentCategory.name;
   mainContent.appendChild(title);
 
-  if (category.items.length === 0) {
+  // Search bar
+  const searchBar = createSearchBar();
+  mainContent.appendChild(searchBar);
+
+  // Loading indicator while fetching search or using cached items
+  const loadingIndicator = document.createElement('p');
+  loadingIndicator.className = 'loading';
+  loadingIndicator.textContent = 'Loading...';
+  mainContent.appendChild(loadingIndicator);
+
+  // Fetch data based on search term
+  let results = [];
+  let totalResults = 0;
+
+  if (currentSearchTerm.length > 0) {
+    // Query TMDb for live search
+    const searchData = await searchCategoryItems(currentCategory, currentSearchTerm, currentPage);
+    results = searchData.results || [];
+    totalResults = searchData.totalResults || 0;
+  } else {
+    // No search: show cached pre-fetched items
+    results = currentCategory.items || [];
+    totalResults = results.length;
+  }
+
+  // Remove loading indicator
+  mainContent.removeChild(loadingIndicator);
+
+  if (results.length === 0) {
     const noResults = document.createElement('p');
-    noResults.textContent = 'No content available for this category right now.';
+    noResults.textContent = `No results found for "${currentSearchTerm}" in ${currentCategory.name}.`;
     noResults.style.textAlign = 'center';
     noResults.style.opacity = '0.7';
     noResults.style.marginTop = '2rem';
@@ -253,32 +342,17 @@ function renderCategoryItems(isInitialRender = true) {
     return;
   }
 
-  // Search bar only on initial render (to not duplicate event listeners)
-  if (isInitialRender) {
-    filteredItems = category.items;
-    currentSearchTerm = '';
-    const searchBar = createSearchBar();
-    mainContent.appendChild(searchBar);
-  } else {
-    // Append the search bar with current value (re-creating the input is safe here)
-    const searchBar = createSearchBar();
-    mainContent.appendChild(searchBar);
-  }
-
-  const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
+  // Pagination calculations
+  const totalPages = Math.ceil(totalResults / ITEMS_PER_PAGE);
   if (totalPages > 0 && currentPage > totalPages) currentPage = 1;
 
-  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
-  const pageItems = filteredItems.slice(startIdx, startIdx + ITEMS_PER_PAGE);
-
+  // Items grid
   const itemsGrid = document.createElement('div');
   itemsGrid.classList.add('items-grid');
 
-  pageItems.forEach(item => {
+  results.forEach(item => {
     const titleText = item.title || item.name || 'Untitled';
-    const posterPath = item.poster_path
-      ? imageBaseUrl + item.poster_path
-      : 'https://via.placeholder.com/300x450?text=No+Image';
+    const posterPath = item.poster_path ? imageBaseUrl + item.poster_path : 'https://via.placeholder.com/300x450?text=No+Image';
 
     const itemCard = document.createElement('article');
     itemCard.classList.add('item-card');
@@ -318,6 +392,7 @@ function renderCategoryItems(isInitialRender = true) {
   mainContent.focus();
 }
 
+// Render category cards on front page
 function renderCategories() {
   mainContent.innerHTML = '';
   const container = document.createElement('div');
@@ -334,8 +409,8 @@ function renderCategories() {
     card.addEventListener('click', () => {
       currentCategory = category;
       currentPage = 1;
-      filteredItems = [];
       currentSearchTerm = '';
+      filteredItems = [];
       renderCategoryItems();
     });
     card.addEventListener('keypress', e => {
@@ -350,23 +425,26 @@ function renderCategories() {
   mainContent.focus();
 }
 
+// Show loading
 function showLoading(show = true) {
   if (show) {
     mainContent.innerHTML = `<p class="loading">Loading categories...</p>`;
   }
 }
 
+// Initialization
 document.addEventListener('DOMContentLoaded', async () => {
   showLoading(true);
   await fetchAllCategoriesData();
   renderCategories();
 });
 
+// Categories nav link in header
 navCategories.addEventListener('click', e => {
   e.preventDefault();
   currentCategory = null;
   currentPage = 1;
-  filteredItems = [];
   currentSearchTerm = '';
+  filteredItems = [];
   renderCategories();
 });
