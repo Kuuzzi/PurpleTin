@@ -71,7 +71,7 @@ nav ul li a:focus-visible {
 /* Main container */
 main#main-content {
   flex-grow: 1;
-  max-width: 1360px;       /* Wider max width to fit 8 cards plus gaps */
+  max-width: 1360px;       /* wide enough for ~8 cards */
   margin: 3rem auto 4rem auto;
   padding: 0 1rem;
   outline: none;
@@ -174,16 +174,18 @@ main#main-content > h2 {
   outline: none;
 }
 
-/* Items Grid */
+/* Items Grid: fluid with up to ~8 cards per row */
 .items-grid {
   display: grid;
-  grid-template-columns: repeat( auto-fit, minmax(160px, 1fr) ); 
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 1.8rem 1.3rem;
   justify-items: center;
   width: 100%;
+  max-width: 1360px; /* max width allowing ~8 cards */
+  margin: 0 auto;
 }
 
-/* Each item card */
+/* Each item card with fixed width */
 .item-card {
   background: #310099;
   border-radius: 16px;
@@ -302,9 +304,11 @@ footer {
   .items-grid {
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 1.2rem;
+    max-width: 100%;
   }
   .item-card {
     max-width: 140px;
+    width: 140px;
   }
   .item-card img {
     height: 210px;
