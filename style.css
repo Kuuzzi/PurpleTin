@@ -71,30 +71,23 @@ nav ul li a:focus-visible {
 /* Main container */
 main#main-content {
   flex-grow: 1;
-  max-width: 1100px;
-  margin: 3rem auto 4rem auto;
-  padding: 0 1rem;
-  outline: none; /* Prevent outline on main */
+  max-width: 1200px;       /* max width to prevent too wide stretch */
+  margin: 3rem auto 4rem auto; /* Center horizontally */
+  padding: 0 1rem;         /* side padding for narrow devices */
+  outline: none;
   user-select: none;
 }
 
-/* Categories wrapper */
+/* Categories grid */
 .categories-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 2.8rem 2rem;
   justify-items: center;
   align-items: stretch;
   padding-bottom: 3rem;
   max-width: 1300px;
   margin: 0 auto;
-}
-
-@media (min-width: 1024px) {
-  .categories-grid {
-    grid-template-columns: repeat(5, 1fr);
-    gap: 3rem 2rem;
-  }
 }
 
 /* Each Category Card */
@@ -144,7 +137,7 @@ main#main-content {
   user-select: text;
 }
 
-/* Items List (on category click) */
+/* Items List Title */
 .items-list h2,
 main#main-content > h2 {
   color: #c9b6ff;
@@ -184,7 +177,7 @@ main#main-content > h2 {
 /* Items Grid */
 .items-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));  
   gap: 1.8rem 1.3rem;
   justify-items: center;
 }
@@ -227,12 +220,11 @@ main#main-content > h2 {
   transition: transform 0.4s ease;
 }
 
-/* Slight zoom on hover for image */
 .item-card:hover img {
   transform: scale(1.07);
 }
 
-/* Info summary */
+/* Item info */
 .item-info {
   padding: 1rem 0.9rem;
   flex-grow: 1;
@@ -308,7 +300,7 @@ footer {
     max-width: 100%;
   }
   .items-grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 1.2rem;
   }
   .item-card {
