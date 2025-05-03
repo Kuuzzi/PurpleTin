@@ -11,7 +11,7 @@ const categories = [
     name: 'Anime',
     description: 'Action-packed and heartwarming Japanese animations.',
     genreId: 16,
-    keywordId: 210024, // "anime" keyword id
+    keywordId: 210024, // anime keyword
     items: [],
     type: ['movie', 'tv']
   },
@@ -49,7 +49,7 @@ const categories = [
     id: 'manga',
     name: 'Manga',
     description: 'Top manga-inspired titles across movies and TV.',
-    keywordId: 31622, // "manga" keyword id
+    keywordId: 31622, // manga keyword
     items: [],
     type: ['movie', 'tv']
   },
@@ -65,7 +65,6 @@ const categories = [
 
 let currentCategory = null;
 let currentPage = 1;
-let filteredItems = [];
 let currentSearchTerm = '';
 
 async function fetchJSON(url) {
@@ -85,15 +84,14 @@ function combineResults(movieData, tvData) {
   return [...movies, ...tvs];
 }
 
-// For static initial fetch
+// Initial fetch of popular items per category for fallback
 async function fetchAllCategoriesData() {
   for (const category of categories) {
     try {
-      if (category.type.includes('movie') && category.type.includes('tv')) {
-        // Fetch movies and tv for categories like anime/manga/cartoons
+      if(category.type.length === 2) {
         let movieUrl = `${baseUrl}/discover/movie?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&page=1`;
         let tvUrl = `${baseUrl}/discover/tv?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&page=1`;
-        
+
         if(category.genreId) {
           movieUrl += `&with_genres=${category.genreId}`;
           tvUrl += `&with_genres=${category.genreId}`;
@@ -106,39 +104,31 @@ async function fetchAllCategoriesData() {
           movieUrl += `&with_original_language=${category.originalLanguage}`;
           tvUrl += `&with_original_language=${category.originalLanguage}`;
         }
-        
+
         const [movieData, tvData] = await Promise.all([fetchJSON(movieUrl), fetchJSON(tvUrl)]);
         category.items = combineResults(movieData, tvData).slice(0, 50);
       } else {
-        // Single type - either movie or tv only
         let url = `${baseUrl}/discover/${category.type[0]}?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&page=1`;
-        
-        if(category.genreId) {
-          url += `&with_genres=${category.genreId}`;
-        }
-        if(category.keywordId) {
-          url += `&with_keywords=${category.keywordId}`;
-        }
-        if(category.originalLanguage) {
-          url += `&with_original_language=${category.originalLanguage}`;
-        }
-        
+
+        if(category.genreId) url += `&with_genres=${category.genreId}`;
+        if(category.keywordId) url += `&with_keywords=${category.keywordId}`;
+        if(category.originalLanguage) url += `&with_original_language=${category.originalLanguage}`;
+
         const data = await fetchJSON(url);
-        category.items = data?.results?.slice(0, 50) || [];
+        category.items = data?.results?.slice(0,50) || [];
       }
-    } catch (e) {
+    } catch(e) {
       console.error(`Error fetching category ${category.name}:`, e);
       category.items = [];
     }
   }
 }
 
-// Construct search URLs by category and query
-function getSearchUrls(category, query, page=1) {
+// Build category-filtered TMDb search URLs for query and page
+function getSearchUrls(category, query, page = 1) {
   const urls = [];
   const encodedQuery = encodeURIComponent(query);
-  
-  // Construct separate URLs for movies and tv if needed
+
   if(category.type.includes('movie')) {
     let movieUrl = `${baseUrl}/search/movie?api_key=${apiKey}&query=${encodedQuery}&page=${page}&language=en-US`;
     if(category.genreId) movieUrl += `&with_genres=${category.genreId}`;
@@ -146,6 +136,7 @@ function getSearchUrls(category, query, page=1) {
     if(category.originalLanguage) movieUrl += `&with_original_language=${category.originalLanguage}`;
     urls.push(movieUrl);
   }
+
   if(category.type.includes('tv')) {
     let tvUrl = `${baseUrl}/search/tv?api_key=${apiKey}&query=${encodedQuery}&page=${page}&language=en-US`;
     if(category.genreId) tvUrl += `&with_genres=${category.genreId}`;
@@ -153,21 +144,20 @@ function getSearchUrls(category, query, page=1) {
     if(category.originalLanguage) tvUrl += `&with_original_language=${category.originalLanguage}`;
     urls.push(tvUrl);
   }
+
   return urls;
 }
 
-// Search TMDb in the current category based on search term and page
-async function searchCategoryItems(category, searchTerm, page=1) {
-  if (!searchTerm) return category.items;
+// Search live on TMDb for current category, query and page
+async function searchCategoryItems(category, searchTerm, page = 1) {
+  if(!searchTerm) return { results: category.items, totalResults: category.items.length };
 
   const urls = getSearchUrls(category, searchTerm, page);
 
   const [movieData, tvData] = await Promise.all(urls.map(url => fetchJSON(url)));
 
-  // Combine the results properly, limit to 50 per page approx
   const results = combineResults(movieData, tvData);
 
-  // Assume total results based on movie data or tv data (sum)
   let totalResults = 0;
   if (movieData?.total_results) totalResults += movieData.total_results;
   if (tvData?.total_results) totalResults += tvData.total_results;
@@ -175,7 +165,7 @@ async function searchCategoryItems(category, searchTerm, page=1) {
   return { results, totalResults };
 }
 
-// Create search bar element
+// Create search bar UI
 function createSearchBar() {
   const wrapper = document.createElement('div');
   wrapper.classList.add('search-bar-container');
@@ -217,7 +207,7 @@ function createSearchBar() {
   return wrapper;
 }
 
-// Render pagination controls
+// Pagination controls UI
 function renderPaginationControls(totalPages) {
   const pagination = document.createElement('div');
   pagination.classList.add('pagination-controls');
@@ -274,7 +264,7 @@ function renderPaginationControls(totalPages) {
   return pagination;
 }
 
-// Render items for currentCategory using currentSearchTerm and currentPage
+// Render category items (with live TMDb search if currentSearchTerm set)
 async function renderCategoryItems() {
   if (!currentCategory) return;
   mainContent.innerHTML = '';
@@ -288,7 +278,6 @@ async function renderCategoryItems() {
     currentCategory = null;
     currentPage = 1;
     currentSearchTerm = '';
-    filteredItems = [];
     renderCategories();
   });
   backBtn.addEventListener('keypress', e => {
@@ -308,33 +297,26 @@ async function renderCategoryItems() {
   const searchBar = createSearchBar();
   mainContent.appendChild(searchBar);
 
-  // Loading indicator while fetching search or using cached items
+  // Loading indicator
   const loadingIndicator = document.createElement('p');
   loadingIndicator.className = 'loading';
   loadingIndicator.textContent = 'Loading...';
   mainContent.appendChild(loadingIndicator);
 
-  // Fetch data based on search term
-  let results = [];
-  let totalResults = 0;
-
-  if (currentSearchTerm.length > 0) {
-    // Query TMDb for live search
-    const searchData = await searchCategoryItems(currentCategory, currentSearchTerm, currentPage);
-    results = searchData.results || [];
-    totalResults = searchData.totalResults || 0;
-  } else {
-    // No search: show cached pre-fetched items
-    results = currentCategory.items || [];
-    totalResults = results.length;
+  // Fetch search results or fallback to cached
+  let { results, totalResults } = await searchCategoryItems(currentCategory, currentSearchTerm, currentPage);
+  if(!results) {
+    results = [];
+    totalResults = 0;
   }
 
-  // Remove loading indicator
   mainContent.removeChild(loadingIndicator);
 
   if (results.length === 0) {
     const noResults = document.createElement('p');
-    noResults.textContent = `No results found for "${currentSearchTerm}" in ${currentCategory.name}.`;
+    noResults.textContent = currentSearchTerm
+      ? `No results found for "${currentSearchTerm}" in ${currentCategory.name}.`
+      : 'No content available for this category right now.';
     noResults.style.textAlign = 'center';
     noResults.style.opacity = '0.7';
     noResults.style.marginTop = '2rem';
@@ -346,14 +328,12 @@ async function renderCategoryItems() {
   const totalPages = Math.ceil(totalResults / ITEMS_PER_PAGE);
   if (totalPages > 0 && currentPage > totalPages) currentPage = 1;
 
-  // Items grid
   const itemsGrid = document.createElement('div');
   itemsGrid.classList.add('items-grid');
 
   results.forEach(item => {
     const titleText = item.title || item.name || 'Untitled';
     const posterPath = item.poster_path ? imageBaseUrl + item.poster_path : 'https://via.placeholder.com/300x450?text=No+Image';
-
     const itemCard = document.createElement('article');
     itemCard.classList.add('item-card');
     itemCard.tabIndex = 0;
@@ -392,7 +372,7 @@ async function renderCategoryItems() {
   mainContent.focus();
 }
 
-// Render category cards on front page
+// Render categories selection page
 function renderCategories() {
   mainContent.innerHTML = '';
   const container = document.createElement('div');
@@ -410,7 +390,6 @@ function renderCategories() {
       currentCategory = category;
       currentPage = 1;
       currentSearchTerm = '';
-      filteredItems = [];
       renderCategoryItems();
     });
     card.addEventListener('keypress', e => {
@@ -425,26 +404,25 @@ function renderCategories() {
   mainContent.focus();
 }
 
-// Show loading
+// Show loading placeholder
 function showLoading(show = true) {
   if (show) {
     mainContent.innerHTML = `<p class="loading">Loading categories...</p>`;
   }
 }
 
-// Initialization
+// Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', async () => {
   showLoading(true);
   await fetchAllCategoriesData();
   renderCategories();
 });
 
-// Categories nav link in header
+// Categories nav link click handler
 navCategories.addEventListener('click', e => {
   e.preventDefault();
   currentCategory = null;
   currentPage = 1;
   currentSearchTerm = '';
-  filteredItems = [];
   renderCategories();
 });
