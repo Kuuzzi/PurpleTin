@@ -1,11 +1,4 @@
-/* PurpleTin + TMDb API Integration
-  Instructions:
-    1) Get your TMDb API key from https://www.themoviedb.org/settings/api
-    2) Put it below in the apiKey variable:
-*/
-
-const apiKey = 'YOUR_TMDB_API_KEY_HERE'; // <-- REPLACE with your TMDb API key (v3 auth key)
-
+const apiKey = 'b139bc417606842811f1526ae92572bc'; // <-- REPLACE with your TMDb API key (v3 auth key)
 const baseUrl = 'https://api.themoviedb.org/3';
 const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
 
