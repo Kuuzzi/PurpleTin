@@ -1,4 +1,4 @@
-const apiKey = 'b139bc417606842811f1526ae92572bc'; // Replace with your TMDb API key
+const apiKey = 'b139bc417606842811f1526ae92572bc'; // <-- Replace this with your TMDb API key
 const baseUrl = 'https://api.themoviedb.org/3';
 const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
 
@@ -65,6 +65,7 @@ const categories = [
 let currentCategory = null;
 let currentPage = 1;
 
+// Fetch helper
 async function fetchJSON(url) {
   try {
     const res = await fetch(url);
@@ -79,10 +80,10 @@ async function fetchJSON(url) {
 function combineResults(movieData, tvData) {
   const movies = movieData?.results?.map(item => ({ ...item, media_type: 'movie' })) || [];
   const tvs = tvData?.results?.map(item => ({ ...item, media_type: 'tv' })) || [];
-  const combined = [...movies, ...tvs];
-  return combined.slice(0, 50);  // Fetch first 50 items to paginate
+  return [...movies, ...tvs].slice(0, 50); // limit to 50 items total
 }
 
+// Fetch all data for each category
 async function fetchAllCategoriesData() {
   for (const category of categories) {
     try {
@@ -109,6 +110,7 @@ async function fetchAllCategoriesData() {
   }
 }
 
+// Render category selection grid
 function renderCategories() {
   mainContent.innerHTML = '';
   const container = document.createElement('div');
@@ -128,7 +130,7 @@ function renderCategories() {
     card.addEventListener('click', () => {
       currentCategory = category;
       currentPage = 1;
-      renderCategoryItems(category);
+      renderCategoryItems();
     });
 
     card.addEventListener('keypress', e => {
@@ -145,6 +147,7 @@ function renderCategories() {
   mainContent.focus();
 }
 
+// Render pagination controls below items grid
 function renderPaginationControls(totalPages) {
   const pagination = document.createElement('div');
   pagination.classList.add('pagination-controls');
@@ -165,7 +168,7 @@ function renderPaginationControls(totalPages) {
   prevBtn.addEventListener('click', () => {
     if (currentPage > 1) {
       currentPage--;
-      renderCategoryItems(currentCategory);
+      renderCategoryItems();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   });
@@ -182,7 +185,7 @@ function renderPaginationControls(totalPages) {
   nextBtn.addEventListener('click', () => {
     if (currentPage < totalPages) {
       currentPage++;
-      renderCategoryItems(currentCategory);
+      renderCategoryItems();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   });
@@ -199,7 +202,11 @@ function renderPaginationControls(totalPages) {
   return pagination;
 }
 
-function renderCategoryItems(category) {
+// Render items for currentCategory & currentPage
+function renderCategoryItems() {
+  const category = currentCategory;
+  if (!category) return;
+
   mainContent.innerHTML = '';
 
   // Back button
@@ -240,6 +247,7 @@ function renderCategoryItems(category) {
   const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
   const pageItems = category.items.slice(startIdx, startIdx + ITEMS_PER_PAGE);
 
+  // Items grid container
   const itemsGrid = document.createElement('div');
   itemsGrid.classList.add('items-grid');
 
@@ -251,7 +259,6 @@ function renderCategoryItems(category) {
     itemCard.tabIndex = 0;
     itemCard.setAttribute('aria-label', `Watch ${titleText}`);
 
-    // <-- The part you requested repeated starts here:
     itemCard.innerHTML = `
       <img src="${posterPath}" alt="Poster of ${titleText}" loading="lazy" />
       <div class="item-info">
@@ -259,13 +266,13 @@ function renderCategoryItems(category) {
         <button type="button" aria-label="Watch ${titleText}">Watch Now</button>
       </div>
     `;
-    // <-- ends here.
 
     const watchBtn = itemCard.querySelector('button');
     watchBtn.addEventListener('click', () => {
       alert(`Streaming "${titleText}" coming soon on PurpleTin!`);
     });
 
+    // Keyboard support to trigger watch
     itemCard.addEventListener('keypress', e => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -287,20 +294,24 @@ function renderCategoryItems(category) {
   mainContent.focus();
 }
 
-// Show loading indicator
+// Show Loading message placeholder
 function showLoading(show = true) {
   if (show) {
     mainContent.innerHTML = `<p class="loading">Loading categories...</p>`;
   }
 }
 
+// INIT
 document.addEventListener('DOMContentLoaded', async () => {
   showLoading(true);
   await fetchAllCategoriesData();
   renderCategories();
 });
 
+// Categories nav link
 navCategories.addEventListener('click', e => {
   e.preventDefault();
+  currentCategory = null;
+  currentPage = 1;
   renderCategories();
 });
