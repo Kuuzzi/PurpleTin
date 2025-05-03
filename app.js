@@ -1,10 +1,8 @@
-const apiKey = 'b139bc417606842811f1526ae92572bc'; // <-- Replace this with your TMDb API key
+const apiKey = 'b139bc417606842811f1526ae92572bc'; // <-- Your TMDb API key
 const baseUrl = 'https://api.themoviedb.org/3';
 const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
-
 const mainContent = document.getElementById('main-content');
 const navCategories = document.getElementById('nav-categories');
-
 const ITEMS_PER_PAGE = 8;
 
 const categories = [
@@ -64,6 +62,7 @@ const categories = [
 
 let currentCategory = null;
 let currentPage = 1;
+let filteredItems = [];
 
 // Fetch helper
 async function fetchJSON(url) {
@@ -110,44 +109,57 @@ async function fetchAllCategoriesData() {
   }
 }
 
-// Render category selection grid
-function renderCategories() {
-  mainContent.innerHTML = '';
-  const container = document.createElement('div');
-  container.classList.add('categories-grid');
+// Create search bar element
+function createSearchBar() {
+  const wrapper = document.createElement('div');
+  wrapper.classList.add('search-bar-container');
+  wrapper.style.textAlign = 'center';
+  wrapper.style.marginBottom = '1rem';
 
-  categories.forEach(category => {
-    const card = document.createElement('article');
-    card.classList.add('category-card');
-    card.tabIndex = 0;
-    card.setAttribute('aria-label', `${category.name} category`);
+  const input = document.createElement('input');
+  input.type = 'search';
+  input.placeholder = `Search ${currentCategory.name}...`;
+  input.setAttribute('aria-label', `Search ${currentCategory.name} items`);
+  input.style.width = '300px';
+  input.style.maxWidth = '90%';
+  input.style.padding = '0.5rem 1rem';
+  input.style.borderRadius = '12px';
+  input.style.border = 'none';
+  input.style.fontSize = '1rem';
+  input.style.boxShadow = '0 0 10px #7b2ff7aa';
+  input.style.transition = 'box-shadow 0.3s ease';
 
-    card.innerHTML = `
-      <h2>${category.name}</h2>
-      <p>${category.description}</p>
-    `;
-
-    card.addEventListener('click', () => {
-      currentCategory = category;
-      currentPage = 1;
-      renderCategoryItems();
-    });
-
-    card.addEventListener('keypress', e => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        card.click();
-      }
-    });
-
-    container.appendChild(card);
+  input.addEventListener('focus', () => {
+    input.style.boxShadow = '0 0 18px #b987f9cc';
+  });
+  input.addEventListener('blur', () => {
+    input.style.boxShadow = '0 0 10px #7b2ff7aa';
   });
 
-  mainContent.appendChild(container);
-  mainContent.focus();
+  // Debounce for search input
+  let debounceTimer;
+  input.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      const term = input.value.trim().toLowerCase();
+      if (!term) {
+        filteredItems = currentCategory.items;
+      } else {
+        filteredItems = currentCategory.items.filter(item => {
+          const title = (item.title || item.name || '').toLowerCase();
+          return title.includes(term);
+        });
+      }
+      currentPage = 1; // reset to first page on search
+      renderCategoryItems(true); // pass true: rendering from search filter
+    }, 300);
+  });
+
+  wrapper.appendChild(input);
+  return wrapper;
 }
 
-// Render pagination controls below items grid
+// Render pagination controls
 function renderPaginationControls(totalPages) {
   const pagination = document.createElement('div');
   pagination.classList.add('pagination-controls');
@@ -198,12 +210,11 @@ function renderPaginationControls(totalPages) {
   pagination.appendChild(prevBtn);
   pagination.appendChild(pageIndicator);
   pagination.appendChild(nextBtn);
-
   return pagination;
 }
 
-// Render items for currentCategory & currentPage
-function renderCategoryItems() {
+// Render category items, accepts a boolean flag "fromSearch" for rendering filtered items
+function renderCategoryItems(fromSearch = false) {
   const category = currentCategory;
   if (!category) return;
 
@@ -217,6 +228,7 @@ function renderCategoryItems() {
   backBtn.addEventListener('click', () => {
     currentCategory = null;
     currentPage = 1;
+    filteredItems = [];
     renderCategories();
   });
   backBtn.addEventListener('keypress', e => {
@@ -225,15 +237,14 @@ function renderCategoryItems() {
       backBtn.click();
     }
   });
-
   mainContent.appendChild(backBtn);
 
-  // Title
+  // Category title
   const title = document.createElement('h2');
   title.textContent = category.name;
   mainContent.appendChild(title);
 
-  if (!category.items.length) {
+  if (category.items.length === 0) {
     const noResults = document.createElement('p');
     noResults.textContent = 'No content available for this category right now.';
     noResults.style.textAlign = 'center';
@@ -243,11 +254,21 @@ function renderCategoryItems() {
     return;
   }
 
-  const totalPages = Math.ceil(category.items.length / ITEMS_PER_PAGE);
-  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
-  const pageItems = category.items.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+  // Add search bar ONLY when not rendering from search input directly
+  if (!fromSearch) {
+    filteredItems = category.items; // Reset filtered items to full list
+    const searchBar = createSearchBar();
+    mainContent.appendChild(searchBar);
+  }
 
-  // Items grid container
+  const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
+  if (totalPages > 0 && currentPage > totalPages) {
+    currentPage = 1; // Reset invalid page number
+  }
+
+  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+  const pageItems = filteredItems.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+
   const itemsGrid = document.createElement('div');
   itemsGrid.classList.add('items-grid');
 
@@ -272,7 +293,6 @@ function renderCategoryItems() {
       alert(`Streaming "${titleText}" coming soon on PurpleTin!`);
     });
 
-    // Keyboard support to trigger watch
     itemCard.addEventListener('keypress', e => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -285,7 +305,7 @@ function renderCategoryItems() {
 
   mainContent.appendChild(itemsGrid);
 
-  // Add pagination controls if more than 1 page
+  // Show pagination controls only if more than 1 page
   if (totalPages > 1) {
     const paginationControls = renderPaginationControls(totalPages);
     mainContent.appendChild(paginationControls);
@@ -294,24 +314,63 @@ function renderCategoryItems() {
   mainContent.focus();
 }
 
-// Show Loading message placeholder
+// Render the category selection cards grid
+function renderCategories() {
+  mainContent.innerHTML = '';
+  const container = document.createElement('div');
+  container.classList.add('categories-grid');
+
+  categories.forEach(category => {
+    const card = document.createElement('article');
+    card.classList.add('category-card');
+    card.tabIndex = 0;
+    card.setAttribute('aria-label', `${category.name} category`);
+
+    card.innerHTML = `
+      <h2>${category.name}</h2>
+      <p>${category.description}</p>
+    `;
+
+    card.addEventListener('click', () => {
+      currentCategory = category;
+      currentPage = 1;
+      filteredItems = [];
+      renderCategoryItems();
+    });
+
+    card.addEventListener('keypress', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        card.click();
+      }
+    });
+
+    container.appendChild(card);
+  });
+
+  mainContent.appendChild(container);
+  mainContent.focus();
+}
+
+// Show loading indicator
 function showLoading(show = true) {
   if (show) {
     mainContent.innerHTML = `<p class="loading">Loading categories...</p>`;
   }
 }
 
-// INIT
+// Initialization on DOM ready
 document.addEventListener('DOMContentLoaded', async () => {
   showLoading(true);
   await fetchAllCategoriesData();
   renderCategories();
 });
 
-// Categories nav link
+// Nav categories link handler
 navCategories.addEventListener('click', e => {
   e.preventDefault();
   currentCategory = null;
   currentPage = 1;
+  filteredItems = [];
   renderCategories();
 });
