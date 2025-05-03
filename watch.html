@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Watch Movie</title>
+  <link rel="stylesheet" href="watch.css" />
+</head>
+<body>
+  <div class="watch-page">
+    <div class="movie-header">
+      <h1 id="movie-title"></h1>
+      <p id="movie-year"></p>
+      <div id="genres" class="genres"></div>
+    </div>
+
+    <div class="video-player">
+      <iframe id="video-frame" src="" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <div class="servers">
+      <label>Servers:</label>
+      <div id="server-buttons" class="server-buttons">
+        <!-- Buttons will be added here by JS -->
+      </div>
+    </div>
+
+    <div class="overview-section">
+      <h2>Overview</h2>
+      <p id="overview-text"></p>
+    </div>
+  </div>
+
+  <script src="watch.js"></script>
+</body>
+</html>
