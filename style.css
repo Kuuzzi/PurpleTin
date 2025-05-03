@@ -1,316 +1,376 @@
-/* Reset & base styles */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+const apiKey = 'b139bc417606842811f1526ae92572bc'; // <-- Your TMDb API key
+const baseUrl = 'https://api.themoviedb.org/3';
+const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
+const mainContent = document.getElementById('main-content');
+const navCategories = document.getElementById('nav-categories');
+const ITEMS_PER_PAGE = 8;
 
-body {
-  margin: 0;
-  font-family: 'Montserrat', sans-serif;
-  background: linear-gradient(135deg, #0b001f 0%, #21004c 100%);
-  color: #d9d6ff;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Header */
-header {
-  width: 100%;
-  background: linear-gradient(90deg, #7B2FF7 0%, #3e0083 100%);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 3rem;
-  box-shadow: 0 4px 12px rgba(123, 47, 247, 0.6);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.logo h1 {
-  font-size: 2rem;
-  color: #d9d6ff;
-  letter-spacing: 6px;
-  text-transform: uppercase;
-  user-select: none;
-  font-weight: 800;
-  text-shadow: 0 0 8px #aa88ffcc;
-}
-
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 2rem;
-  margin: 0;
-  padding: 0;
-}
-
-nav ul li a {
-  color: #d9d6ff;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 1.1rem;
-  padding: 0.4rem 0.8rem;
-  border-radius: 8px;
-  transition: background-color 0.3s, color 0.3s;
-  cursor: pointer;
-}
-
-nav ul li a:hover,
-nav ul li a:focus-visible {
-  background-color: #9c65ff;
-  color: #1b002f;
-  outline: none;
-}
-
-/* Main container */
-main#main-content {
-  flex-grow: 1;
-  max-width: 1360px;       /* wide enough for ~8 cards */
-  margin: 3rem auto 4rem auto;
-  padding: 0 1rem;
-  outline: none;
-  user-select: none;
-}
-
-/* Categories grid */
-.categories-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2.8rem 2rem;
-  justify-items: center;
-  align-items: stretch;
-  padding-bottom: 3rem;
-  max-width: 1300px;
-  margin: 0 auto;
-}
-
-/* Each Category Card */
-.category-card {
-  background-color: #2c0066;
-  border-radius: 18px;
-  box-shadow:
-    0 0 15px rgba(123, 47, 247, 0.7),
-    inset 0 0 25px rgba(123, 47, 247, 0.6);
-  padding: 2.2rem 2rem 2rem 2rem;
-  width: 100%;
-  max-width: 270px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  color: #d9d6ff;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 2px solid transparent;
-  text-align: center;
-}
-
-.category-card:hover,
-.category-card:focus-visible {
-  transform: translateY(-12px) scale(1.05);
-  box-shadow:
-    0 0 25px 6px #b987f9,
-    inset 0 0 35px 5px #ae7eff;
-  border-color: #b987f9;
-  outline: none;
-}
-
-.category-card h2 {
-  font-size: 1.7rem;
-  margin-bottom: 0.6rem;
-  font-weight: 900;
-  letter-spacing: 2px;
-  text-shadow: 0 0 6px #ae7eff;
-}
-
-.category-card p {
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #cfc8ffec;
-  font-weight: 500;
-  letter-spacing: 0.03em;
-  user-select: text;
-}
-
-/* Items List Title */
-.items-list h2,
-main#main-content > h2 {
-  color: #c9b6ff;
-  margin-bottom: 1.4rem;
-  font-size: 2.4rem;
-  font-weight: 900;
-  text-shadow: 0 0 8px #9a7dffcc;
-  user-select: none;
-  text-align: center;
-}
-
-/* Back Button */
-.back-button {
-  display: inline-block;
-  margin-bottom: 1.6rem;
-  padding: 0.7rem 1.25rem;
-  background: #7B2FF7;
-  color: #fff;
-  font-weight: 700;
-  font-size: 1.1rem;
-  border-radius: 12px;
-  box-shadow: 0 0 15px #7B2FF7cc;
-  cursor: pointer;
-  border: none;
-  text-decoration: none;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
-  user-select: none;
-}
-
-.back-button:hover,
-.back-button:focus-visible {
-  background: #a06fff;
-  box-shadow: 0 0 20px #b891ffcc;
-  outline: none;
-}
-
-/* Items Grid: fluid with up to ~8 cards per row */
-.items-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 1.8rem 1.3rem;
-  justify-items: center;
-  width: 100%;
-  max-width: 1360px; /* max width allowing ~8 cards */
-  margin: 0 auto;
-}
-
-/* Each item card with fixed width */
-.item-card {
-  background: #310099;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow:
-    0 0 15px rgba(123, 47, 247, 0.8),
-    inset 0 0 25px #b87aff88;
-  width: 160px;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  color: #eee;
-  user-select: none;
-  outline-offset: 3px;
-}
-
-.item-card:hover,
-.item-card:focus-visible {
-  transform: scale(1.12);
-  box-shadow:
-    0 0 30px #b987f9,
-    inset 0 0 35px #ceaaffcc;
-  outline: none;
-}
-
-.item-card img {
-  width: 100%;
-  height: 240px;
-  object-fit: cover;
-  border-bottom: 3px solid #b987f9;
-  user-select: none;
-  pointer-events: none;
-  transition: transform 0.4s ease;
-}
-
-.item-card:hover img {
-  transform: scale(1.07);
-}
-
-/* Item info */
-.item-info {
-  padding: 1rem 0.9rem;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.item-info h3 {
-  font-size: 1rem;
-  margin: 0 0 0.5rem 0;
-  color: #d0c4ff;
-  font-weight: 700;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  letter-spacing: 0.04em;
-}
-
-.item-info button {
-  background-color: #ad85ff;
-  border: none;
-  color: #21004c;
-  font-weight: 700;
-  cursor: pointer;
-  padding: 0.38rem 0.9rem;
-  border-radius: 9px;
-  font-size: 0.9rem;
-  user-select: none;
-  transition: background-color 0.25s ease;
-}
-
-.item-info button:hover,
-.item-info button:focus-visible {
-  background-color: #7B2FF7;
-  outline: none;
-}
-
-/* Footer */
-footer {
-  background: #1c005b;
-  text-align: center;
-  padding: 1.4rem 0;
-  font-size: 0.95rem;
-  color: #b2aaffcc;
-  box-shadow: inset 0 2px 10px rgba(255 255 255 / 0.15);
-  user-select: none;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-}
-
-/* Page loading message */
-.loading {
-  color: #b987f9;
-  font-size: 1.6rem;
-  text-align: center;
-  margin-top: 7rem;
-  user-select: none;
-}
-
-/* Responsive adjustments */
-@media (max-width: 520px) {
-  header {
-    padding: 1rem 1.5rem;
+const categories = [
+  {
+    id: 'anime',
+    name: 'Anime',
+    description: 'Action-packed and heartwarming Japanese animations.',
+    fetchUrlMovie: `${baseUrl}/discover/movie?api_key=${apiKey}&with_genres=16&with_keywords=210024&language=en-US&sort_by=popularity.desc&page=1`,
+    fetchUrlTV: `${baseUrl}/discover/tv?api_key=${apiKey}&with_genres=16&with_keywords=210024&language=en-US&sort_by=popularity.desc&page=1`,
+    items: []
+  },
+  {
+    id: 'movies',
+    name: 'Movies',
+    description: 'Blockbuster hits and timeless classics around the world.',
+    fetchUrl: `${baseUrl}/discover/movie?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&page=1`,
+    items: []
+  },
+  {
+    id: 'tagalog-movies',
+    name: 'Tagalog Movies',
+    description: 'Experience Filipino culture through featured Tagalog films.',
+    fetchUrl: `${baseUrl}/discover/movie?api_key=${apiKey}&with_original_language=tl&language=en-US&sort_by=popularity.desc&page=1`,
+    items: []
+  },
+  {
+    id: 'tvshow',
+    name: 'TV Show',
+    description: 'Binge-worthy series and captivating stories.',
+    fetchUrl: `${baseUrl}/discover/tv?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&page=1`,
+    items: []
+  },
+  {
+    id: 'cartoons',
+    name: 'Cartoons',
+    description: 'Fun, humor, and nostalgia for all ages.',
+    fetchUrlMovie: `${baseUrl}/discover/movie?api_key=${apiKey}&with_genres=16&language=en-US&sort_by=popularity.desc&page=1`,
+    fetchUrlTV: `${baseUrl}/discover/tv?api_key=${apiKey}&with_genres=16&language=en-US&sort_by=popularity.desc&page=1`,
+    items: []
+  },
+  {
+    id: 'manga',
+    name: 'Manga',
+    description: 'Top manga-inspired titles across movies and TV.',
+    fetchUrlMovie: `${baseUrl}/discover/movie?api_key=${apiKey}&with_keywords=31622&language=en-US&sort_by=popularity.desc&page=1`,
+    fetchUrlTV: `${baseUrl}/discover/tv?api_key=${apiKey}&with_keywords=31622&language=en-US&sort_by=popularity.desc&page=1`,
+    items: []
+  },
+  {
+    id: 'kdrama',
+    name: 'Kdrama',
+    description: 'Romance, suspense, and more from Korean dramas.',
+    fetchUrl: `${baseUrl}/discover/tv?api_key=${apiKey}&with_original_language=ko&language=en-US&sort_by=popularity.desc&page=1`,
+    items: []
   }
-  nav ul {
-    gap: 1rem;
-  }
-  main#main-content {
-    margin: 2rem 1rem 3rem 1rem;
-  }
-  .category-card {
-    max-width: 100%;
-  }
-  .items-grid {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 1.2rem;
-    max-width: 100%;
-  }
-  .item-card {
-    max-width: 140px;
-    width: 140px;
-  }
-  .item-card img {
-    height: 210px;
+];
+
+let currentCategory = null;
+let currentPage = 1;
+let filteredItems = [];
+
+// Fetch helper
+async function fetchJSON(url) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Status: ${res.status}`);
+    return await res.json();
+  } catch (e) {
+    console.error('Fetch error:', e);
+    return null;
   }
 }
+
+function combineResults(movieData, tvData) {
+  const movies = movieData?.results?.map(item => ({ ...item, media_type: 'movie' })) || [];
+  const tvs = tvData?.results?.map(item => ({ ...item, media_type: 'tv' })) || [];
+  return [...movies, ...tvs].slice(0, 50); // limit to 50 items total
+}
+
+// Fetch all data for each category
+async function fetchAllCategoriesData() {
+  for (const category of categories) {
+    try {
+      if (category.fetchUrlMovie && category.fetchUrlTV) {
+        const [movieData, tvData] = await Promise.all([
+          fetchJSON(category.fetchUrlMovie),
+          fetchJSON(category.fetchUrlTV)
+        ]);
+        if (movieData || tvData) {
+          category.items = combineResults(movieData, tvData);
+        } else {
+          category.items = [];
+        }
+      } else if (category.fetchUrl) {
+        const data = await fetchJSON(category.fetchUrl);
+        category.items = data?.results?.slice(0, 50) || [];
+      } else {
+        category.items = [];
+      }
+    } catch (e) {
+      console.error(`Error fetching category ${category.name}:`, e);
+      category.items = [];
+    }
+  }
+}
+
+// Create search bar element
+function createSearchBar() {
+  const wrapper = document.createElement('div');
+  wrapper.classList.add('search-bar-container');
+  wrapper.style.textAlign = 'center';
+  wrapper.style.marginBottom = '1rem';
+
+  const input = document.createElement('input');
+  input.type = 'search';
+  input.placeholder = `Search ${currentCategory.name}...`;
+  input.setAttribute('aria-label', `Search ${currentCategory.name} items`);
+  input.style.width = '300px';
+  input.style.maxWidth = '90%';
+  input.style.padding = '0.5rem 1rem';
+  input.style.borderRadius = '12px';
+  input.style.border = 'none';
+  input.style.fontSize = '1rem';
+  input.style.boxShadow = '0 0 10px #7b2ff7aa';
+  input.style.transition = 'box-shadow 0.3s ease';
+
+  input.addEventListener('focus', () => {
+    input.style.boxShadow = '0 0 18px #b987f9cc';
+  });
+  input.addEventListener('blur', () => {
+    input.style.boxShadow = '0 0 10px #7b2ff7aa';
+  });
+
+  // Debounce for search input
+  let debounceTimer;
+  input.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      const term = input.value.trim().toLowerCase();
+      if (!term) {
+        filteredItems = currentCategory.items;
+      } else {
+        filteredItems = currentCategory.items.filter(item => {
+          const title = (item.title || item.name || '').toLowerCase();
+          return title.includes(term);
+        });
+      }
+      currentPage = 1; // reset to first page on search
+      renderCategoryItems(true); // pass true: rendering from search filter
+    }, 300);
+  });
+
+  wrapper.appendChild(input);
+  return wrapper;
+}
+
+// Render pagination controls
+function renderPaginationControls(totalPages) {
+  const pagination = document.createElement('div');
+  pagination.classList.add('pagination-controls');
+  pagination.style.textAlign = 'center';
+  pagination.style.marginTop = '2rem';
+  pagination.style.userSelect = 'none';
+
+  const prevBtn = document.createElement('button');
+  prevBtn.textContent = '← Prev';
+  prevBtn.disabled = currentPage === 1;
+  prevBtn.style.marginRight = '1rem';
+  prevBtn.style.padding = '0.5rem 1rem';
+  prevBtn.style.background = '#7B2FF7';
+  prevBtn.style.color = '#fff';
+  prevBtn.style.border = 'none';
+  prevBtn.style.borderRadius = '8px';
+  prevBtn.style.cursor = prevBtn.disabled ? 'not-allowed' : 'pointer';
+  prevBtn.addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderCategoryItems();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+
+  const nextBtn = document.createElement('button');
+  nextBtn.textContent = 'Next →';
+  nextBtn.disabled = currentPage >= totalPages;
+  nextBtn.style.padding = '0.5rem 1rem';
+  nextBtn.style.background = '#7B2FF7';
+  nextBtn.style.color = '#fff';
+  nextBtn.style.border = 'none';
+  nextBtn.style.borderRadius = '8px';
+  nextBtn.style.cursor = nextBtn.disabled ? 'not-allowed' : 'pointer';
+  nextBtn.addEventListener('click', () => {
+    if (currentPage < totalPages) {
+      currentPage++;
+      renderCategoryItems();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+
+  const pageIndicator = document.createElement('span');
+  pageIndicator.textContent = `Page ${currentPage} of ${totalPages}`;
+  pageIndicator.style.color = '#d9d6ff';
+  pageIndicator.style.fontWeight = '700';
+
+  pagination.appendChild(prevBtn);
+  pagination.appendChild(pageIndicator);
+  pagination.appendChild(nextBtn);
+  return pagination;
+}
+
+// Render category items, accepts a boolean flag "fromSearch" for rendering filtered items
+function renderCategoryItems(fromSearch = false) {
+  const category = currentCategory;
+  if (!category) return;
+
+  mainContent.innerHTML = '';
+
+  // Back button
+  const backBtn = document.createElement('button');
+  backBtn.type = 'button';
+  backBtn.classList.add('back-button');
+  backBtn.textContent = '← Back to Categories';
+  backBtn.addEventListener('click', () => {
+    currentCategory = null;
+    currentPage = 1;
+    filteredItems = [];
+    renderCategories();
+  });
+  backBtn.addEventListener('keypress', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      backBtn.click();
+    }
+  });
+  mainContent.appendChild(backBtn);
+
+  // Category title
+  const title = document.createElement('h2');
+  title.textContent = category.name;
+  mainContent.appendChild(title);
+
+  if (category.items.length === 0) {
+    const noResults = document.createElement('p');
+    noResults.textContent = 'No content available for this category right now.';
+    noResults.style.textAlign = 'center';
+    noResults.style.opacity = '0.7';
+    noResults.style.marginTop = '2rem';
+    mainContent.appendChild(noResults);
+    return;
+  }
+
+  // Add search bar ONLY when not rendering from search input directly
+  if (!fromSearch) {
+    filteredItems = category.items; // Reset filtered items to full list
+    const searchBar = createSearchBar();
+    mainContent.appendChild(searchBar);
+  }
+
+  const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
+  if (totalPages > 0 && currentPage > totalPages) {
+    currentPage = 1; // Reset invalid page number
+  }
+
+  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+  const pageItems = filteredItems.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+
+  const itemsGrid = document.createElement('div');
+  itemsGrid.classList.add('items-grid');
+
+  pageItems.forEach(item => {
+    const titleText = item.title || item.name || 'Untitled';
+    const posterPath = item.poster_path ? imageBaseUrl + item.poster_path : 'https://via.placeholder.com/300x450?text=No+Image';
+    const itemCard = document.createElement('article');
+    itemCard.classList.add('item-card');
+    itemCard.tabIndex = 0;
+    itemCard.setAttribute('aria-label', `Watch ${titleText}`);
+
+    itemCard.innerHTML = `
+      <img src="${posterPath}" alt="Poster of ${titleText}" loading="lazy" />
+      <div class="item-info">
+        <h3 title="${titleText}">${titleText.length > 25 ? titleText.slice(0, 22) + '...' : titleText}</h3>
+        <button type="button" aria-label="Watch ${titleText}">Watch Now</button>
+      </div>
+    `;
+
+    const watchBtn = itemCard.querySelector('button');
+    watchBtn.addEventListener('click', () => {
+      alert(`Streaming "${titleText}" coming soon on PurpleTin!`);
+    });
+
+    itemCard.addEventListener('keypress', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        watchBtn.click();
+      }
+    });
+
+    itemsGrid.appendChild(itemCard);
+  });
+
+  mainContent.appendChild(itemsGrid);
+
+  // Show pagination controls only if more than 1 page
+  if (totalPages > 1) {
+    const paginationControls = renderPaginationControls(totalPages);
+    mainContent.appendChild(paginationControls);
+  }
+
+  mainContent.focus();
+}
+
+// Render the category selection cards grid
+function renderCategories() {
+  mainContent.innerHTML = '';
+  const container = document.createElement('div');
+  container.classList.add('categories-grid');
+
+  categories.forEach(category => {
+    const card = document.createElement('article');
+    card.classList.add('category-card');
+    card.tabIndex = 0;
+    card.setAttribute('aria-label', `${category.name} category`);
+
+    card.innerHTML = `
+      <h2>${category.name}</h2>
+      <p>${category.description}</p>
+    `;
+
+    card.addEventListener('click', () => {
+      currentCategory = category;
+      currentPage = 1;
+      filteredItems = [];
+      renderCategoryItems();
+    });
+
+    card.addEventListener('keypress', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        card.click();
+      }
+    });
+
+    container.appendChild(card);
+  });
+
+  mainContent.appendChild(container);
+  mainContent.focus();
+}
+
+// Show loading indicator
+function showLoading(show = true) {
+  if (show) {
+    mainContent.innerHTML = `<p class="loading">Loading categories...</p>`;
+  }
+}
+
+// Initialization on DOM ready
+document.addEventListener('DOMContentLoaded', async () => {
+  showLoading(true);
+  await fetchAllCategoriesData();
+  renderCategories();
+});
+
+// Nav categories link handler
+navCategories.addEventListener('click', e => {
+  e.preventDefault();
+  currentCategory = null;
+  currentPage = 1;
+  filteredItems = [];
+  renderCategories();
+});
