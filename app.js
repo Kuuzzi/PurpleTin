@@ -3,6 +3,51 @@ const baseUrl = 'https://api.themoviedb.org/3';
 const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
 
 const mainContent = document.getElementById('main-content');
+
+const categories = [
+  {id: 'anime', name: 'Anime', description: 'Action-packed and heartwarming Japanese animations.'},
+  {id: 'movies', name: 'Movies', description: 'Blockbuster hits and timeless classics around the world.'},
+  {id: 'tagalog-movies', name: 'Tagalog Movies', description: 'Experience Filipino culture through featured Tagalog films.'},
+  {id: 'tvshow', name: 'TV Show', description: 'Binge-worthy series and captivating stories.'},
+  {id: 'cartoons', name: 'Cartoons', description: 'Fun, humor, and nostalgia for all ages.'},
+  {id: 'manga', name: 'Manga', description: 'Top manga-inspired titles across movies and TV.'},
+  {id: 'kdrama', name: 'Kdrama', description: 'Romance, suspense, and more from Korean dramas.'},
+];
+
+function renderCategories() {
+  mainContent.innerHTML = '';
+  const container = document.createElement('div');
+  container.classList.add('categories-grid');
+
+  categories.forEach(({id, name, description}) => {
+    const card = document.createElement('article');
+    card.classList.add('category-card');
+    card.tabIndex = 0;
+    card.setAttribute('aria-label', `${name} category`);
+
+    card.innerHTML = `
+      <h2>${name}</h2>
+      <p>${description}</p>
+    `;
+
+    // Placeholder click functionality
+    card.addEventListener('click', () => alert(`Clicked ${name} category!`));
+    card.addEventListener('keypress', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        card.click();
+      }
+    });
+
+    container.appendChild(card);
+  });
+
+  mainContent.appendChild(container);
+  mainContent.focus();
+}
+
+document.addEventListener('DOMContentLoaded', () => renderCategories());
+
 const navCategories = document.getElementById('nav-categories');
 const loadingDiv = document.getElementById('loading');
 
