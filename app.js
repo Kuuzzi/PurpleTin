@@ -3,7 +3,7 @@ const baseUrl = 'https://api.themoviedb.org/3';
 const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
 const mainContent = document.getElementById('main-content');
 const navCategories = document.getElementById('nav-categories');
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 16;
 
 const categories = [
   {
