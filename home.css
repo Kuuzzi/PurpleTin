@@ -229,3 +229,10 @@ footer {
     font-size: 1rem;
   }
 }
+.loading {
+  color: #b987f9;
+  font-size: 1.5rem;
+  text-align: center;
+  margin-top: 5rem;
+  user-select: none;
+}
