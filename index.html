@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My Website</title>
+  <title>PT PurpleTin</title>
   <link rel="stylesheet" href="home.css" />
   <link
     rel="stylesheet"
@@ -19,20 +19,25 @@
 <body>
   <nav class="navbar">
     <div class="logo">
-      <span class="logo-text">bun</span>
-      <small>MOVIES</small>
+      <span class="logo-text">PT PurpleTin</span>
     </div>
     <ul class="nav-links">
       <li class="active"><a href="#"><i class="fas fa-home"></i> Home</a></li>
-      <li><a href="#">TV Shows</a></li>
-      <li><a href="#">Library <i class="fas fa-chevron-down"></i></a></li>
+      <li><a href="#">Categories</a></li>
     </ul>
     <div class="nav-icons">
-      <button class="search-btn" onclick="openSearchModal()">
+      <input
+        type="text"
+        class="search-bar"
+        placeholder="Search movies..."
+        onfocus="openSearchModal()"
+        id="main-search-input"
+        oninput="searchTMDB(this.value)"
+        autocomplete="off"
+        aria-label="Search movies"
+      />
+      <button class="search-btn" onclick="openSearchModal()" aria-label="Open search">
         <i class="fas fa-search"></i>
-      </button>
-      <button class="profile-btn">
-        <i class="fas fa-user-circle"></i>
       </button>
     </div>
   </nav>
@@ -60,37 +65,55 @@
   </div>
 
   <div class="row">
-    <h2><span class="section-bar"></span> Trending Movies</h2>
+    <h2><span class="section-bar"></span> Featured Movies</h2>
     <div class="carousel-wrapper">
-      <button class="carousel-btn prev" aria-label="Previous movies">&#10094;</button>
-      <div class="list" id="movies-list"></div>
-      <button class="carousel-btn next" aria-label="Next movies">&#10095;</button>
+      <button class="carousel-btn prev" aria-label="Previous featured">&#10094;</button>
+      <div class="list" id="featured-list"></div>
+      <button class="carousel-btn next" aria-label="Next featured">&#10095;</button>
     </div>
   </div>
 
   <div class="row">
-    <h2><span class="section-bar"></span> Trending TV Shows</h2>
+    <h2><span class="section-bar"></span> Action</h2>
     <div class="carousel-wrapper">
-      <button class="carousel-btn prev" aria-label="Previous TV shows">&#10094;</button>
-      <div class="list" id="tvshows-list"></div>
-      <button class="carousel-btn next" aria-label="Next TV shows">&#10095;</button>
+      <button class="carousel-btn prev" aria-label="Previous action">&#10094;</button>
+      <div class="list" id="action-list"></div>
+      <button class="carousel-btn next" aria-label="Next action">&#10095;</button>
     </div>
   </div>
 
   <div class="row">
-    <h2><span class="section-bar"></span> Trending Anime</h2>
+    <h2><span class="section-bar"></span> Comedy</h2>
     <div class="carousel-wrapper">
-      <button class="carousel-btn prev" aria-label="Previous anime">&#10094;</button>
-      <div class="list" id="anime-list"></div>
-      <button class="carousel-btn next" aria-label="Next anime">&#10095;</button>
+      <button class="carousel-btn prev" aria-label="Previous comedy">&#10094;</button>
+      <div class="list" id="comedy-list"></div>
+      <button class="carousel-btn next" aria-label="Next comedy">&#10095;</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <h2><span class="section-bar"></span> Fantasy</h2>
+    <div class="carousel-wrapper">
+      <button class="carousel-btn prev" aria-label="Previous fantasy">&#10094;</button>
+      <div class="list" id="fantasy-list"></div>
+      <button class="carousel-btn next" aria-label="Next fantasy">&#10095;</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <h2><span class="section-bar"></span> Cartoons</h2>
+    <div class="carousel-wrapper">
+      <button class="carousel-btn prev" aria-label="Previous cartoons">&#10094;</button>
+      <div class="list" id="cartoons-list"></div>
+      <button class="carousel-btn next" aria-label="Next cartoons">&#10095;</button>
     </div>
   </div>
 
   <div class="modal" id="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()" style="color: red;">&times;</span>
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <span class="close" onclick="closeModal()" style="color: red;" aria-label="Close modal">&times;</span>
       <div class="modal-body">
-        <img id="modal-image" src="" alt="" />
+        <img id="modal-image" src="" alt="Movie Poster" />
         <div class="modal-text">
           <h2 id="modal-title"></h2>
           <div class="stars" id="modal-rating"></div>
@@ -111,24 +134,28 @@
         height="315"
         frameborder="0"
         allowfullscreen
+        title="Movie Player"
       ></iframe>
     </div>
   </div>
 
-  <div class="search-modal" id="search-modal">
-    <span class="close" onclick="closeSearchModal()" style="color: red;">&times;</span>
+  <div class="search-modal" id="search-modal" role="dialog" aria-modal="true" aria-labelledby="search-label">
+    <span class="close" onclick="closeSearchModal()" style="color: red;" aria-label="Close Search">&times;</span>
     <input
       type="text"
       id="search-input"
       placeholder="Search for a movie or show..."
-      oninput="searchTMDB()"
+      oninput="searchTMDB(this.value)"
+      autocomplete="off"
+      aria-labelledby="search-label"
+      autofocus
     />
-    <div class="results" id="search-results"></div>
+    <div class="results" id="search-results" aria-live="polite"></div>
   </div>
 
   <footer class="footer">
     <div class="footer-content">
-      <p>&copy; 2025 My Website. All rights reserved.</p>
+      <p>&copy; 2025 PT PurpleTin. All rights reserved.</p>
       <div class="footer-links">
         <a href="#">Disclaimer</a>
         <a href="#">About Us</a>
