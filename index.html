@@ -1,56 +1,102 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>My Website</title>
-  <link rel="stylesheet" href="css/home.css">
-  <link rel="preload" href="css/home.css" as="style">
-  <link rel="preload" href="js/home.js" as="script">
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/home.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+  <!-- Google Fonts for distressed effect -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap"
+    rel="stylesheet"
+  />
   <script defer src="js/home.js"></script>
 </head>
-
 <body>
-  <div class="navbar">
-    <img src="logo.png" alt="LOGO HERE" />
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()" />
+  <nav class="navbar">
+    <div class="logo">
+      <span class="logo-text">bun</span>
+      <small>MOVIES</small>
+    </div>
+    <ul class="nav-links">
+      <li class="active"><a href="#"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="#">TV Shows</a></li>
+      <li><a href="#">Library <i class="fas fa-chevron-down"></i></a></li>
+    </ul>
+    <div class="nav-icons">
+      <button class="search-btn" onclick="openSearchModal()">
+        <i class="fas fa-search"></i>
+      </button>
+      <button class="profile-btn">
+        <i class="fas fa-user-circle"></i>
+      </button>
+    </div>
+  </nav>
+
+  <div class="banner" id="banner">
+    <div class="overlay"></div>
+    <div class="banner-content">
+      <h1 id="banner-title" class="distressed-font"></h1>
+      <div class="meta">
+        <span class="stars" id="banner-rating"></span>
+        <span class="year" id="banner-year"></span>
+      </div>
+      <p class="description" id="banner-description"></p>
+      <button class="btn-play" id="btn-play">
+        <i class="fas fa-play"></i> Play
+      </button>
+    </div>
+    <iframe
+      id="banner-video"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      title="Featured Video"
+    ></iframe>
+  </div>
+
+  <div class="row">
+    <h2><span class="section-bar"></span> Trending Movies</h2>
+    <div class="carousel-wrapper">
+      <button class="carousel-btn prev" aria-label="Previous movies">&#10094;</button>
+      <div class="list" id="movies-list"></div>
+      <button class="carousel-btn next" aria-label="Next movies">&#10095;</button>
     </div>
   </div>
 
-  <div class="banner" id="banner">
-    <h1 id="banner-title"></h1>
+  <div class="row">
+    <h2><span class="section-bar"></span> Trending TV Shows</h2>
+    <div class="carousel-wrapper">
+      <button class="carousel-btn prev" aria-label="Previous TV shows">&#10094;</button>
+      <div class="list" id="tvshows-list"></div>
+      <button class="carousel-btn next" aria-label="Next TV shows">&#10095;</button>
+    </div>
   </div>
 
   <div class="row">
-    <h2>Trending Movies</h2>
-    <div class="list" id="movies-list"></div>
-  </div>
-
-  <div class="row">
-    <h2>Trending TV Shows</h2>
-    <div class="list" id="tvshows-list"></div>
-  </div>
-
-  <div class="row">
-    <h2>Trending Anime</h2>
-    <div class="list" id="anime-list"></div>
+    <h2><span class="section-bar"></span> Trending Anime</h2>
+    <div class="carousel-wrapper">
+      <button class="carousel-btn prev" aria-label="Previous anime">&#10094;</button>
+      <div class="list" id="anime-list"></div>
+      <button class="carousel-btn next" aria-label="Next anime">&#10095;</button>
+    </div>
   </div>
 
   <div class="modal" id="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()" style="color: red;">&times;</span>
       <div class="modal-body">
-  <img id="modal-image" src="" alt="" />
-  <div class="modal-text">
-    <h2 id="modal-title"></h2>
-    <div class="stars" id="modal-rating"></div>
-    <p id="modal-description"></p>
-  </div>
-</div>
-      
+        <img id="modal-image" src="" alt="" />
+        <div class="modal-text">
+          <h2 id="modal-title"></h2>
+          <div class="stars" id="modal-rating"></div>
+          <p id="modal-description"></p>
+        </div>
+      </div>
       <div class="server-selector">
         <label for="server">Change Server:</label>
         <select id="server" onchange="changeServer()">
@@ -59,26 +105,36 @@
           <option value="player.videasy.net">Player.Videasy.net</option>
         </select>
       </div>
-      <iframe id="modal-video" width="100%" height="315" frameborder="0" allowfullscreen></iframe>
+      <iframe
+        id="modal-video"
+        width="100%"
+        height="315"
+        frameborder="0"
+        allowfullscreen
+      ></iframe>
     </div>
   </div>
 
   <div class="search-modal" id="search-modal">
     <span class="close" onclick="closeSearchModal()" style="color: red;">&times;</span>
-    <input type="text" id="search-input" placeholder="Search for a movie or show..." oninput="searchTMDB()" />
+    <input
+      type="text"
+      id="search-input"
+      placeholder="Search for a movie or show..."
+      oninput="searchTMDB()"
+    />
     <div class="results" id="search-results"></div>
   </div>
 
-<footer class="footer">
-  <div class="footer-content">
-    <p>&copy; 2025 My Website. All rights reserved.</p>
-    <div class="footer-links">
-      <a href="#">Disclaimer</a>
-      <a href="#">About Us</a>
-      <a href="#">Contact Us</a>
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2025 My Website. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">Disclaimer</a>
+        <a href="#">About Us</a>
+        <a href="#">Contact Us</a>
+      </div>
     </div>
-  </div>
-</footer>
-
-  
+  </footer>
 </body>
+</html>
