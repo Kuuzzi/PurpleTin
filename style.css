@@ -14,7 +14,7 @@ header {
   padding: 15px 30px;
 }
 
-.header-banner {
+.header-img {
   width: 100%; /* Make the image responsive */
   max-width: 600px; /* Limit the image width */
   height: auto; /* Maintain aspect ratio */
