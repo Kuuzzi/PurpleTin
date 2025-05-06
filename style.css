@@ -11,7 +11,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 30px; /* Decreased padding */
+  padding: 10px 30px; /* Current padding */
 }
 
 .logo-container {
@@ -20,7 +20,7 @@ header {
 }
 
 .logo-img {
-  height: 50px; /* Adjusted logo size */
+  height: 60px; /* Increased logo size */
 }
 
 nav {
