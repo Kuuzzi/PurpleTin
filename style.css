@@ -70,3 +70,17 @@ nav a:hover {
   padding: 15px;
   border-radius: 8px;
 }
+.logo {
+  width: 160px;
+  margin: 20px auto;
+  display: block;
+}
+
+.banner {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(128, 0, 128, 0.4);
+}
+
