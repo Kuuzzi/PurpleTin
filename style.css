@@ -11,7 +11,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 30px; /* Current padding */
+  padding: 10px 30px;
 }
 
 .logo-container {
@@ -19,8 +19,10 @@ header {
   align-items: center;
 }
 
-.logo-img {
-  height: 60px; /* Increased logo size */
+.logo {
+  font-size: 1.8em; /* Adjusted font size */
+  font-weight: bold;
+  color: #c089ff;
 }
 
 nav {
