@@ -14,10 +14,10 @@
     </div>
     <nav>
       <div class="nav-left">
-        <a href="#">Movies</a>
-        <a href="#">Tagalog Movies</a>
-        <a href="#">Anime</a>
-        <a href="#">TV Series</a>
+        <a href="#movies">Movies</a>
+        <a href="#tagalog">Tagalog Movies</a>
+        <a href="#anime">Anime</a>
+        <a href="#tvseries">TV Series</a>
       </div>
     </nav>
   </header>
@@ -26,9 +26,28 @@
     <input type="text" id="searchInput" placeholder="Search movies..." />
   </section>
 
-  <section class="movie-list">
-    <!-- Dynamic movie titles go here -->
-    <ul id="movieContainer"></ul>
+  <section id="movies" class="movie-list">
+    <ul id="movieContainer">
+      <!-- Movie list items -->
+    </ul>
+  </section>
+
+  <section id="tagalog" class="movie-list" style="display:none;">
+    <ul id="movieContainer">
+      <!-- Tagalog movie list items -->
+    </ul>
+  </section>
+
+  <section id="anime" class="movie-list" style="display:none;">
+    <ul id="movieContainer">
+      <!-- Anime list items -->
+    </ul>
+  </section>
+
+  <section id="tvseries" class="movie-list" style="display:none;">
+    <ul id="movieContainer">
+      <!-- TV Series list items -->
+    </ul>
   </section>
 
   <script src="script.js"></script>
