@@ -41,7 +41,7 @@ nav a:hover {
 
 .banner-img {
   width: 100%;
-  max-height: 150px; /* Set a maximum height */
+  max-height: 200px; /* Increased max height */
   object-fit: contain; /* Adjusts the image to contain within the max height */
   display: block;
 }
