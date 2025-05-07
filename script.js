@@ -2,66 +2,73 @@
 document.addEventListener('DOMContentLoaded', function() {
   const searchInput = document.getElementById('searchInput');
   const movieContainers = document.querySelectorAll('.movie-list ul');
+
   const movies = {
-    movies: ["Movie Title 1", "Movie Title 2"],
-    tagalog: ["Tagalog Movie Title 1", "Tagalog Movie Title 2"],
-    anime: ["Anime Title 1", "Anime Title 2"],
-    tvseries: ["TV Series Title 1", "TV Series Title 2"]
+    movies: ["Movie Title"],
+    tagalog: ["Sampung Utos Kay Josh 2025"],
+    anime: ["Anime Title"],
+    tvseries: ["TV Series Title"]
   };
 
-  function displayMovies(filteredMovies) {
+  function displayMovies() {
     movieContainers.forEach((container, index) => {
+      const category = Object.keys(movies)[index];
+      const moviesInCategory = movies[category];
       container.innerHTML = '';
-      if (filteredMovies[index].length === 0) {
+
+      if (moviesInCategory.length === 0) {
         const message = document.createElement('li');
-        message.textContent = 'No movies found. Please check back later.';
+        message.textContent = 'No movies available yet. Please check back later.';
         message.style.fontStyle = 'italic';
         message.style.color = '#bbb';
         container.appendChild(message);
       } else {
-        filteredMovies[index].forEach(movie => {
+        moviesInCategory.forEach(movie => {
           const li = document.createElement('li');
-          li.textContent = movie;
-          li.addEventListener('click', function() {
-            window.location.href = `download.html?title=${encodeURIComponent(movie)}`;
-          });
+          li.innerHTML = `
+            <a href="#">${movie}</a>
+            <button onclick="downloadMovie('${movie}', '1080p')">Download 1080p</button>
+            <button onclick="downloadMovie('${movie}', '720p')">Download 720p</button>
+          `;
           container.appendChild(li);
         });
       }
     });
   }
 
-  function filterMovies() {
-    const searchQuery = searchInput.value.toLowerCase().trim();
-    if (searchQuery === '') {
-      displayMovies(Object.values(movies).flat());
-    } else {
-      const filteredMovies = Object.values(movies).map(categoryMovies =>
-        categoryMovies.filter(movie => movie.toLowerCase().includes(searchQuery))
-      );
-      displayMovies(filteredMovies);
-    }
+  function downloadMovie(title, quality) {
+    alert(`Downloading ${title} in ${quality} quality...`);
+    // Here you would set the href attribute to the actual download URL
+    // For example:
+    // window.location.href = `/path/to/${title}-${quality}.mp4`;
   }
 
-  searchInput.addEventListener('input', filterMovies);
+  searchInput.addEventListener('input', function () {
+    const searchQuery = this.value.toLowerCase().trim();
+    const allMovies = Object.values(movies).flat();
+    const filteredMovies = allMovies.filter(movie =>
+      movie.toLowerCase().includes(searchQuery)
+    );
 
-  const navLinks = document.querySelectorAll('.nav-left a');
-  const sections = document.querySelectorAll('.movie-list');
-
-  navLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      const category = this.getAttribute('href').substring(1);
-
-      sections.forEach(section => {
-        section.style.display = 'none';
-      });
-
-      document.getElementById(category).style.display = 'block';
-      filterMovies(); // Refilter movies when category is selected
-    });
+    displayMovies(filteredMovies);
   });
 
   // Initial display of all movies
-  displayMovies(Object.values(movies).map(categoryMovies => categoryMovies));
+  displayMovies();
+});
+
+const navLinks = document.querySelectorAll('.nav-left a');
+const sections = document.querySelectorAll('.movie-list');
+
+navLinks.forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    const category = this.getAttribute('href').substring(1);
+
+    sections.forEach(section => {
+      section.style.display = 'none';
+    });
+
+    document.getElementById(category).style.display = 'block';
+  });
 });
