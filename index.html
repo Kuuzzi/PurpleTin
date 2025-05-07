@@ -20,13 +20,13 @@
         <a href="#anime">Anime</a>
         <a href="#tvseries">TV Series</a>
       </div>
+      <div class="search-container">
+        <form id="search-form">
+          <input type="text" id="search-input" placeholder="Search for movies...">
+          <button type="submit" id="search-button">Search</button>
+        </form>
+      </div>
     </nav>
-    <div class="search-container">
-      <form id="search-form">
-        <input type="text" id="search-input" placeholder="Search for movies...">
-        <button type="submit" id="search-button">Search</button>
-      </form>
-    </div>
   </header>
 
   <section id="movies" class="movie-list">
@@ -35,7 +35,7 @@
       <li><a href="http://pastepeso.com/TheMonkey" target="_blank">The Monkey 2025</a></li>
       <li><a href="http://pastepeso.com/SilentZone" target="_blank">Silent Zone 2025</a></li>
       <li><a href="https://pastepeso.com/Moanamovie2" target="_blank">Moana 2 2024</a></li>
-      <li><a href="http://pastepeso.com/InTheLostLands" target="_blank">In The Lost Lands 2025</a></li>
+      <li><a href="http://pastepeso.com/KungFuPanda4" target="_blank">Kung Fu Panda 4 2024</a></li>
       <!-- Add more movies here -->
     </ul>
   </section>
@@ -44,7 +44,6 @@
     <ul id="movieContainer-cartoons">
       <li><a href="http://pastepeso.com/TheGarfield" target="_blank">The Garfield Movie 2024</a></li>
       <li><a href="http://pastepeso.com/SavingBKN" target="_blank">Saving Bikini Bottom The Sandy Cheeks Movie 2024</a></li>
-      <li><a href="http://pastepeso.com/KungFuPanda4" target="_blank">Kung Fu Panda 4 2024</a></li>
       <!-- Add Cartoons list items -->
     </ul>
   </section>
@@ -85,12 +84,10 @@
       const sections = document.querySelectorAll('.movie-list');
       let currentCategory = 'movies';
 
-      // Function to get the movie container based on the current category
       function getMovieContainer(category) {
         return document.getElementById(`movieContainer-${category}`);
       }
 
-      // Function to filter movies based on the search query
       function filterMovies(query, category) {
         const movieContainer = getMovieContainer(category);
         const movies = movieContainer.getElementsByTagName('li');
@@ -105,13 +102,11 @@
         }
       }
 
-      // Event listener for search input
       searchInput.addEventListener('input', function() {
         const query = this.value.toLowerCase();
         filterMovies(query, currentCategory);
       });
 
-      // Event listener for navigation links
       navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
           e.preventDefault();
@@ -124,7 +119,6 @@
           document.getElementById(category).style.display = 'block';
           currentCategory = category;
 
-          // Clear the search input and reset the movie list
           searchInput.value = '';
           filterMovies('', currentCategory);
         });
