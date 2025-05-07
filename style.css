@@ -1,4 +1,4 @@
-/* General Body Styles */
+/* style.css */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -6,36 +6,30 @@ body {
   color: #fff;
 }
 
-/* Header Styles */
 header {
   background-color: #2e0f46;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 15px 30px;
-  position: relative;
 }
 
-/* Logo Container Styles */
 .logo-container {
   display: flex;
   align-items: center;
 }
 
-/* Logo Text Styles */
 .logo {
   font-size: 1.8em;
   font-weight: bold;
   color: #c089ff;
 }
 
-/* Navigation Styles */
 nav {
   display: flex;
   align-items: center;
 }
 
-/* Navigation Link Styles */
 .nav-left a {
   margin-left: 20px;
   text-decoration: none;
@@ -43,65 +37,53 @@ nav {
   transition: color 0.3s ease;
 }
 
-/* Navigation Link Hover Styles */
 .nav-left a:hover {
   color: #fff;
 }
 
-/* Search Container Styles */
 .search-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  max-width: 600px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: #6a0dad; /* Purple background */
+  padding: 10px 0;
+  text-align: center;
 }
 
-/* Search Form Styles */
 #search-form {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  width: 100%;
 }
 
-/* Search Input Styles */
 #search-input {
-  padding: 0.5rem;
+  padding: 10px;
   font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px 0 0 4px;
+  border: none;
+  border-radius: 5px 0 0 5px;
+  background-color: #581b83; /* Darker purple */
+  color: #fff;
   flex: 1;
-  width: 100%;
+  max-width: 500px;
+  margin-right: 5px;
 }
 
-/* Search Button Styles */
 #search-button {
-  padding: 0.5rem;
+  padding: 10px 20px;
   font-size: 1rem;
-  background-color: #5cb85c;
+  background-color: #9370db; /* Lighter purple */
   color: white;
   border: none;
-  border-radius: 0 4px 4px 0;
+  border-radius: 0 5px 5px 0;
   cursor: pointer;
 }
 
-/* Search Button Hover Styles */
 #search-button:hover {
-  background-color: #4cae4c;
+  background-color: #7b4397; /* Darker purple on hover */
 }
 
-/* Movie List Styles */
 .movie-list ul {
   list-style: none;
   padding: 0;
   margin: 20px;
 }
 
-/* Movie List Item Styles */
 .movie-list li {
   background-color: #2c1a40;
   margin-bottom: 10px;
@@ -110,13 +92,11 @@ nav {
   color: #fff;
 }
 
-/* Link Styles */
 a {
   color: #c089ff;
   text-decoration: none;
 }
 
-/* Link Hover Styles */
 a:hover {
   text-decoration: underline;
 }
