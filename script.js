@@ -2,12 +2,11 @@
 document.addEventListener('DOMContentLoaded', function() {
   const searchInput = document.getElementById('searchInput');
   const movieContainers = document.querySelectorAll('.movie-list ul');
-
   const movies = {
-    movies: ["Movie Title"],
-    tagalog: ["Sampung Utos Kay Josh 2025"],
-    anime: ["Anime Title"],
-    tvseries: ["TV Series Title"]
+    movies: ["Movie Title 1", "Movie Title 2"],
+    tagalog: ["Sampung Utos Kay Josh 2025", "Ang Babaeng Walang Pakiramdam 2021"],
+    anime: ["Anime Title 1", "Anime Title 2"],
+    tvseries: ["TV Series Title 1", "TV Series Title 2"]
   };
 
   function displayMovies() {
@@ -25,24 +24,12 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         moviesInCategory.forEach(movie => {
           const li = document.createElement('li');
-          li.innerHTML = `
-            <a href="#">${movie}</a>
-            <button onclick="downloadMovie('${movie}', '1080p')">Download 1080p</button>
-            <button onclick="downloadMovie('${movie}', '720p')">Download 720p</button>
-          `;
+          li.textContent = movie;
           container.appendChild(li);
         });
       }
     });
   }
-
-// script.js
-function downloadMovie(title, quality) {
-  // Implement your download logic here
-  // For now, it just shows an alert
-  alert(`Downloading ${title} in ${quality} quality...`);
-  // Example: window.location.href = `/path/to/${title}-${quality}.mp4`;
-}
 
   searchInput.addEventListener('input', function () {
     const searchQuery = this.value.toLowerCase().trim();
@@ -55,21 +42,21 @@ function downloadMovie(title, quality) {
   });
 
   // Initial display of all movies
-  displayMovies();
-});
+  displayMovies(Object.values(movies).flat());
 
-const navLinks = document.querySelectorAll('.nav-left a');
-const sections = document.querySelectorAll('.movie-list');
+  const navLinks = document.querySelectorAll('.nav-left a');
+  const sections = document.querySelectorAll('.movie-list');
 
-navLinks.forEach(link => {
-  link.addEventListener('click', function(e) {
-    e.preventDefault();
-    const category = this.getAttribute('href').substring(1);
+  navLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const category = this.getAttribute('href').substring(1);
 
-    sections.forEach(section => {
-      section.style.display = 'none';
+      sections.forEach(section => {
+        section.style.display = 'none';
+      });
+
+      document.getElementById(category).style.display = 'block';
     });
-
-    document.getElementById(category).style.display = 'block';
   });
 });
