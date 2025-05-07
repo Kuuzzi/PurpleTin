@@ -1,53 +1,37 @@
 // script.js
-document.addEventListener('DOMContentLoaded', function() {
-  const searchInput = document.getElementById('searchInput');
-  const movieContainers = document.querySelectorAll('.movie-list ul');
 
-  const movies = {
-    movies: ["Movie Title 1", "Movie Title 2"],
-    tagalog: ["Sampung Utos Kay Josh 2025", "Ang Babaeng Walang Pakiramdam 2021"],
-    anime: ["Anime Title 1", "Anime Title 2"],
-    tvseries: ["TV Series Title 1", "TV Series Title 2"]
-  };
+const movies = []; // No movies yet
 
-  function displayMovies() {
-    movieContainers.forEach((container, index) => {
-      const category = Object.keys(movies)[index];
-      const moviesInCategory = movies[category];
-      container.innerHTML = '';
+const container = document.getElementById("movieContainer");
 
-      if (moviesInCategory.length === 0) {
-        const message = document.createElement('li');
-        message.textContent = 'No movies available yet. Please check back later.';
-        message.style.fontStyle = 'italic';
-        message.style.color = '#bbb';
-        container.appendChild(message);
-      } else {
-        moviesInCategory.forEach(movie => {
-          const li = document.createElement('li');
-          const a = document.createElement('a');
-          a.href = `https://pastepeso.com/lMe53DgC`; // Replace with actual download link
-          a.textContent = movie;
-          li.appendChild(a);
-          container.appendChild(li);
-        });
-      }
-    });
+function displayMovies(list) {
+  container.innerHTML = "";
+
+  if (list.length === 0) {
+    const message = document.createElement("li");
+    message.textContent = "No movies available yet. Please check back later.";
+    message.style.fontStyle = "italic";
+    message.style.color = "#bbb";
+    container.appendChild(message);
+    return;
   }
 
-  searchInput.addEventListener('input', function () {
-    const searchQuery = this.value.toLowerCase().trim();
-    const allMovies = Object.values(movies).flat();
-    const filteredMovies = allMovies.filter(movie =>
-      movie.toLowerCase().includes(searchQuery)
-    );
-
-    displayMovies(filteredMovies);
+  list.forEach(movie => {
+    const li = document.createElement("li");
+    li.textContent = movie;
+    container.appendChild(li);
   });
+}
 
-  // Initial display of all movies
-  displayMovies(Object.values(movies).flat());
+document.getElementById("searchInput").addEventListener("input", function () {
+  const search = this.value.toLowerCase();
+  const filtered = movies.filter(m => m.toLowerCase().includes(search));
+  displayMovies(filtered);
+});
 
+displayMovies(movies);
+
+document.addEventListener('DOMContentLoaded', function() {
   const navLinks = document.querySelectorAll('.nav-left a');
   const sections = document.querySelectorAll('.movie-list');
 
