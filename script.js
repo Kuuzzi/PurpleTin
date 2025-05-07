@@ -4,26 +4,44 @@ document.addEventListener('DOMContentLoaded', function() {
   const movieContainers = document.querySelectorAll('.movie-list ul');
 
   const movies = {
-    movies: ["Movie Title 1", "Movie Title 2"],
-    tagalog: ["Sampung Utos Kay Josh 2025", "Ang Babaeng Walang Pakiramdam 2021"],
-    anime: ["Anime Title 1", "Anime Title 2"],
-    tvseries: ["TV Series Title 1", "TV Series Title 2"]
+    movies: [
+     { title: "Movie Title 1", url: "https://example.com/movie1" },
+     { title: "Movie Title 2", url: "https://example.com/movie2" }
+   ],
+    tagalog: [
+     { title: "Sampung Utos Kay Josh 2025", url: "https://pastepeso.com/lMe53DgC" },
+     { title: "Ang Babaeng Walang Pakiramdam 2021", url: "https://pastepeso.com/FvNH0qZqR" }
+    ],
+    anime: [
+     { title: "Anime Title 1", url: "https://example.com/anime1" },
+     { title: "Anime Title 2", url: "https://example.com/anime2" }
+    ],
+    tvseries: [
+     { title: "TV Series Title 1", url: "https://example.com/tvseries1" },
+     { title: "TV Series Title 2", url: "https://example.com/tvseries2" }
+    ]
   };
 
   function displayMovies(filteredMovies) {
-    movieContainers.forEach(container => {
+    movieContainers.forEach((container, index) => {
+      const category = Object.keys(movies)[index];
+      const moviesInCategory = filteredMovies[index] || movies[category];
       container.innerHTML = '';
 
-      if (filteredMovies.length === 0) {
+      if (moviesInCategory.length === 0) {
         const message = document.createElement('li');
-        message.textContent = 'No movies found. Please check back later.';
+        message.textContent = 'No movies available yet. Please check back later.';
         message.style.fontStyle = 'italic';
         message.style.color = '#bbb';
         container.appendChild(message);
       } else {
-        filteredMovies.forEach(movie => {
+        moviesInCategory.forEach(movie => {
           const li = document.createElement('li');
-          li.textContent = movie;
+          const a = document.createElement('a');
+          a.href = movie.url; // Set the href attribute to the movie's URL
+          a.textContent = movie.title;
+          a.target = "_blank"; // Open the link in a new tab
+          li.appendChild(a);
           container.appendChild(li);
         });
       }
@@ -34,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchQuery = this.value.toLowerCase().trim();
     const allMovies = Object.values(movies).flat();
     const filteredMovies = allMovies.filter(movie =>
-      movie.toLowerCase().includes(searchQuery)
+      movie.title.toLowerCase().includes(searchQuery)
     );
 
     displayMovies(filteredMovies);
@@ -56,7 +74,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
 
       document.getElementById(category).style.display = 'block';
-      displayMovies(movies[category]); // Display movies for the selected category
     });
   });
 });
