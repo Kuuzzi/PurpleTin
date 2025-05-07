@@ -7,7 +7,7 @@ body {
 }
 
 header {
-  background-color: #2e0f46;
+  background-color: #4b0082; /* Header background color */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -42,13 +42,12 @@ nav {
 }
 
 .search-container {
-  background-color: #6a0dad; /* Purple background */
-  padding: 10px 0;
-  text-align: center;
+  display: flex;
+  align-items: center;
 }
 
 #search-form {
-  display: inline-flex;
+  display: flex;
   align-items: center;
 }
 
