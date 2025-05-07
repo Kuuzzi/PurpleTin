@@ -41,19 +41,6 @@ nav {
   color: #fff;
 }
 
-.search-bar {
-  text-align: center;
-  margin: 20px 0;
-}
-
-.search-bar input {
-  width: 70%;
-  padding: 12px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1em;
-}
-
 .movie-list ul {
   list-style: none;
   padding: 0;
@@ -65,7 +52,14 @@ nav {
   margin-bottom: 10px;
   padding: 15px;
   border-radius: 8px;
-  color: #fff; /* Make movie title white */
+  color: #fff;
 }
 
-/* Remove styles for download buttons */
+a {
+  color: #c089ff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
