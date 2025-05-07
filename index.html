@@ -29,6 +29,14 @@
     </nav>
   </header>
 
+  <nav class="categories">
+    <a href="#movies">Movies</a>
+    <a href="#cartoons">Cartoons</a>
+    <a href="#tagalog">Tagalog Movies</a>
+    <a href="#anime">Anime</a>
+    <a href="#tvseries">TV Series</a>
+  </nav>
+
   <section id="movies" class="movie-list">
     <ul id="movieContainer-movies">
       <li><a href="https://pastepeso.com/TheOldWay" target="_blank">The Old Way 2025</a></li>
@@ -72,7 +80,7 @@
       <li><a href="https://pastepeso.com/HowToCheatDeath" target="_blank">How To Cheat Death Season 1</a></li>
       <li><a href="https://pastepeso.com/TheWalkingDeadS1" target="_blank">The Walking Dead : Dead City Season 1</a></li>
       <li><a href="https://pastepeso.com/WeakHeroClass" target="_blank">Weak Hero Class Season 1</a></li>
-      <li><a href="https://pastepeso.com/Youngsheldon1080p" target="_blank">Young Sheldon Season 1</a></li>
+      <li><a href="https://pasteso.com/Youngsheldon1080p" target="_blank">Young Sheldon Season 1</a></li>
       <!-- Add TV Series list items -->
     </ul>
   </section>
@@ -80,7 +88,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const searchInput = document.getElementById('search-input');
-      const navLinks = document.querySelectorAll('.nav-left a');
+      const navLinks = document.querySelectorAll('.categories a');
       const sections = document.querySelectorAll('.movie-list');
       let currentCategory = 'movies';
 
