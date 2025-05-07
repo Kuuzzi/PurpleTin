@@ -1,39 +1,59 @@
 // script.js
-
-const movies = []; // No movies yet
-
-const container = document.getElementById("movieContainer");
-
-function displayMovies(list) {
-  container.innerHTML = "";
-
-  if (list.length === 0) {
-    const message = document.createElement("li");
-    message.textContent = "No movies available yet. Please check back later.";
-    message.style.fontStyle = "italic";
-    message.style.color = "#bbb";
-    container.appendChild(message);
-    return;
-  }
-
-  list.forEach(movie => {
-    const li = document.createElement("li");
-    li.textContent = movie;
-    container.appendChild(li);
-  });
-}
-
-document.getElementById("searchInput").addEventListener("input", function () {
-  const search = this.value.toLowerCase();
-  const filtered = movies.filter(m => m.toLowerCase().includes(search));
-  displayMovies(filtered);
-});
-
-displayMovies(movies);
-
 document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('searchInput');
   const navLinks = document.querySelectorAll('.nav-left a');
   const sections = document.querySelectorAll('.movie-list');
+
+  // Sample movie data across categories
+  const movies = {
+    movies: ["Movie Title 1", "Movie Title 2"],
+    tagalog: ["Tagalog Movie Title 1", "Tagalog Movie Title 2"],
+    anime: ["Anime Title 1", "Anime Title 2"],
+    tvseries: ["TV Series Title 1", "TV Series Title 2"]
+  };
+
+  function displayMovies(filteredMovies) {
+    sections.forEach(section => {
+      const container = section.querySelector('ul');
+      container.innerHTML = ''; // Clear existing movies
+
+      if (filteredMovies.length === 0) {
+        const message = document.createElement('li');
+        message.textContent = 'No movies found. Please check back later.';
+        message.style.fontStyle = 'italic';
+        message.style.color = '#bbb';
+        container.appendChild(message);
+      } else {
+        filteredMovies.forEach(movie => {
+          const li = document.createElement('li');
+          li.textContent = movie;
+          li.addEventListener('click', function() {
+            window.location.href = `download.html?title=${encodeURIComponent(movie)}`;
+          });
+          container.appendChild(li);
+        });
+      }
+    });
+  }
+
+  searchInput.addEventListener('input', function () {
+    const searchQuery = this.value.toLowerCase().trim();
+    let allMovies = [];
+
+    // Collect all movies from categories
+    Object.values(movies).forEach(categoryMovies => {
+      allMovies = [...allMovies, ...categoryMovies];
+    });
+
+    const filteredMovies = allMovies.filter(movie =>
+      movie.toLowerCase().includes(searchQuery)
+    );
+
+    displayMovies(filteredMovies);
+  });
+
+  // Initial display of all movies
+  displayMovies(Object.values(movies).flat());
 
   navLinks.forEach(link => {
     link.addEventListener('click', function(e) {
