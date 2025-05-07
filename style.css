@@ -65,20 +65,7 @@ nav {
   margin-bottom: 10px;
   padding: 15px;
   border-radius: 8px;
+  color: #fff; /* Make movie title white */
 }
 
-.download-button {
-  background-color: transparent;
-  border: 2px solid #c089ff; /* Purple border */
-  color: #c089ff; /* Purple text */
-  padding: 5px 10px;
-  margin-right: 5px;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.download-button:hover {
-  background-color: #c089ff; /* Purple background on hover */
-  color: #fff; /* White text on hover */
-}
+/* Remove styles for download buttons */
