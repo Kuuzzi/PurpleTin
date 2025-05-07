@@ -1,53 +1,37 @@
 // script.js
-document.addEventListener('DOMContentLoaded', function() {
-  const searchInput = document.getElementById('searchInput');
-  const movieContainers = document.querySelectorAll('.movie-list ul');
 
-  const movies = [
-    "Movie Title",
-    "Sampung Utos Kay Josh 2025",
-    // Add more movies here
-  ];
+const movies = []; // No movies yet
 
-  function displayMovies(filteredMovies) {
-    movieContainers.forEach(container => {
-      container.innerHTML = ''; // Clear existing movies
+const container = document.getElementById("movieContainer");
 
-      if (filteredMovies.length === 0) {
-        const message = document.createElement('li');
-        message.textContent = 'No movies found. Please check back later.';
-        message.style.fontStyle = 'italic';
-        message.style.color = '#bbb';
-        container.appendChild(message);
-      } else {
-        filteredMovies.forEach(movie => {
-          const li = document.createElement('li');
-          li.textContent = movie;
-          li.addEventListener('click', function() {
-            // Handle click event to navigate to download page
-            window.location.href = `download.html?title=${encodeURIComponent(movie)}`;
-          });
-          container.appendChild(li);
-        });
-      }
-    });
+function displayMovies(list) {
+  container.innerHTML = "";
+
+  if (list.length === 0) {
+    const message = document.createElement("li");
+    message.textContent = "No movies available yet. Please check back later.";
+    message.style.fontStyle = "italic";
+    message.style.color = "#bbb";
+    container.appendChild(message);
+    return;
   }
 
-  searchInput.addEventListener('input', function () {
-    const searchQuery = this.value.toLowerCase().trim();
-    if (searchQuery === '') {
-      displayMovies(movies); // Display all movies if search query is empty
-    } else {
-      const filteredMovies = movies.filter(movie =>
-        movie.toLowerCase().includes(searchQuery)
-      );
-      displayMovies(filteredMovies);
-    }
+  list.forEach(movie => {
+    const li = document.createElement("li");
+    li.textContent = movie;
+    container.appendChild(li);
   });
+}
 
-  // Initial display of all movies
-  displayMovies(movies);
+document.getElementById("searchInput").addEventListener("input", function () {
+  const search = this.value.toLowerCase();
+  const filtered = movies.filter(m => m.toLowerCase().includes(search));
+  displayMovies(filtered);
+});
 
+displayMovies(movies);
+
+document.addEventListener('DOMContentLoaded', function() {
   const navLinks = document.querySelectorAll('.nav-left a');
   const sections = document.querySelectorAll('.movie-list');
 
