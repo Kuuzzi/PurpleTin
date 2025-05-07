@@ -1,0 +1,45 @@
+<!-- download.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Download Movie</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <div class="logo">PurpleTin 🌷</div>
+    </div>
+    <nav>
+      <div class="nav-left">
+        <a href="index.html">Home</a>
+      </div>
+    </nav>
+  </header>
+
+  <section>
+    <h2 id="movieTitle">Loading...</h2>
+    <p>Choose a video quality:</p>
+    <button onclick="downloadVideo('1080p')">Download 1080p</button>
+    <button onclick="downloadVideo('720p')">Download 720p</button>
+    <!-- Add more quality options here -->
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const params = new URLSearchParams(window.location.search);
+      const movie = params.get('movie');
+      document.getElementById('movieTitle').textContent = movie;
+
+      function downloadVideo(quality) {
+        // This is where you would include the logic to handle the download
+        alert(`Downloading ${movie} in ${quality} quality...`);
+        // For example, you might set the href of an anchor tag to a download link
+        // document.getElementById('downloadLink').href = `/path/to/${movie}-${quality}.mp4`;
+      }
+    });
+  </script>
+</body>
+</html>
