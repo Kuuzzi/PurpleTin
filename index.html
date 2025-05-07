@@ -12,22 +12,15 @@
     <div class="logo-container">
       <div class="logo">PurpleTin 🌷</div>
     </div>
-    <nav>
-      <div class="nav-left">
-        <a href="#movies">Movies</a>
-        <a href="#cartoons">Cartoons</a>
-        <a href="#tagalog">Tagalog Movies</a>
-        <a href="#anime">Anime</a>
-        <a href="#tvseries">TV Series</a>
-      </div>
-      <div class="search-container">
-        <form id="search-form">
-          <input type="text" id="search-input" placeholder="Search for movies...">
-          <button type="submit" id="search-button">Search</button>
-        </form>
-      </div>
-    </nav>
   </header>
+
+  <nav class="categories">
+    <a href="#movies">Movies</a>
+    <a href="#cartoons">Cartoons</a>
+    <a href="#tagalog">Tagalog Movies</a>
+    <a href="#anime">Anime</a>
+    <a href="#tvseries">TV Series</a>
+  </nav>
 
   <section id="movies" class="movie-list">
     <ul id="movieContainer-movies">
@@ -80,7 +73,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const searchInput = document.getElementById('search-input');
-      const navLinks = document.querySelectorAll('.nav-left a');
+      const navLinks = document.querySelectorAll('.categories a');
       const sections = document.querySelectorAll('.movie-list');
       let currentCategory = 'movies';
 
