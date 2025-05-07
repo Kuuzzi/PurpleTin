@@ -36,12 +36,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  function downloadMovie(title, quality) {
-    alert(`Downloading ${title} in ${quality} quality...`);
-    // Here you would set the href attribute to the actual download URL
-    // For example:
-    // window.location.href = `/path/to/${title}-${quality}.mp4`;
-  }
+// script.js
+function downloadMovie(title, quality) {
+  // Implement your download logic here
+  // For now, it just shows an alert
+  alert(`Downloading ${title} in ${quality} quality...`);
+  // Example: window.location.href = `/path/to/${title}-${quality}.mp4`;
+}
 
   searchInput.addEventListener('input', function () {
     const searchQuery = this.value.toLowerCase().trim();
