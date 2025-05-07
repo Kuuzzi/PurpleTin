@@ -2,6 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   const searchInput = document.getElementById('searchInput');
   const movieContainers = document.querySelectorAll('.movie-list ul');
+
   const movies = {
     movies: ["Movie Title 1", "Movie Title 2"],
     tagalog: ["Sampung Utos Kay Josh 2025", "Ang Babaeng Walang Pakiramdam 2021"],
@@ -24,7 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         moviesInCategory.forEach(movie => {
           const li = document.createElement('li');
-          li.textContent = movie;
+          const a = document.createElement('a');
+          a.href = `https://pastepeso.com/lMe53DgC`; // Replace with actual download link
+          a.textContent = movie;
+          li.appendChild(a);
           container.appendChild(li);
         });
       }
