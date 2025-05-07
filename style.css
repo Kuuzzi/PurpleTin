@@ -7,11 +7,16 @@ body {
 }
 
 header {
-  background-color: #4b0082;
+  background-color: #4b0082; /* Header background color */
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   padding: 15px 30px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
 }
 
 .logo {
@@ -20,26 +25,56 @@ header {
   color: #c089ff;
 }
 
-.categories {
-  background-color: #4b0082;
+nav {
   display: flex;
-  justify-content: center;
-  padding: 10px 0;
+  align-items: center;
 }
 
-.categories a {
-  margin: 0 15px;
+.nav-left a {
+  margin-left: 20px;
   text-decoration: none;
   color: #d9b3ff;
   transition: color 0.3s ease;
 }
 
-.categories a:hover {
+.nav-left a:hover {
   color: #fff;
 }
 
-.movie-list {
-  margin-top: 20px;
+.search-container {
+  display: flex;
+  align-items: center;
+}
+
+#search-form {
+  display: flex;
+  align-items: center;
+}
+
+#search-input {
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px 0 0 5px;
+  background-color: #581b83; /* Darker purple */
+  color: #fff;
+  flex: 1;
+  max-width: 500px;
+  margin-right: 5px;
+}
+
+#search-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #9370db; /* Lighter purple */
+  color: white;
+  border: none;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+}
+
+#search-button:hover {
+  background-color: #7b4397; /* Darker purple on hover */
 }
 
 .movie-list ul {
