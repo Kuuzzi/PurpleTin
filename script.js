@@ -1,37 +1,48 @@
 // script.js
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('searchInput');
+  const movieContainers = document.querySelectorAll('.movie-list ul');
 
-const movies = []; // No movies yet
+  const movies = {
+    movies: ["Movie Title 1", "Movie Title 2"],
+    tagalog: ["Sampung Utos Kay Josh 2025", "Ang Babaeng Walang Pakiramdam 2021"],
+    anime: ["Anime Title 1", "Anime Title 2"],
+    tvseries: ["TV Series Title 1", "TV Series Title 2"]
+  };
 
-const container = document.getElementById("movieContainer");
+  function displayMovies(filteredMovies) {
+    movieContainers.forEach(container => {
+      container.innerHTML = '';
 
-function displayMovies(list) {
-  container.innerHTML = "";
-
-  if (list.length === 0) {
-    const message = document.createElement("li");
-    message.textContent = "No movies available yet. Please check back later.";
-    message.style.fontStyle = "italic";
-    message.style.color = "#bbb";
-    container.appendChild(message);
-    return;
+      if (filteredMovies.length === 0) {
+        const message = document.createElement('li');
+        message.textContent = 'No movies found. Please check back later.';
+        message.style.fontStyle = 'italic';
+        message.style.color = '#bbb';
+        container.appendChild(message);
+      } else {
+        filteredMovies.forEach(movie => {
+          const li = document.createElement('li');
+          li.textContent = movie;
+          container.appendChild(li);
+        });
+      }
+    });
   }
 
-  list.forEach(movie => {
-    const li = document.createElement("li");
-    li.textContent = movie;
-    container.appendChild(li);
+  searchInput.addEventListener('input', function () {
+    const searchQuery = this.value.toLowerCase().trim();
+    const allMovies = Object.values(movies).flat();
+    const filteredMovies = allMovies.filter(movie =>
+      movie.toLowerCase().includes(searchQuery)
+    );
+
+    displayMovies(filteredMovies);
   });
-}
 
-document.getElementById("searchInput").addEventListener("input", function () {
-  const search = this.value.toLowerCase();
-  const filtered = movies.filter(m => m.toLowerCase().includes(search));
-  displayMovies(filtered);
-});
+  // Initial display of all movies
+  displayMovies(Object.values(movies).flat());
 
-displayMovies(movies);
-
-document.addEventListener('DOMContentLoaded', function() {
   const navLinks = document.querySelectorAll('.nav-left a');
   const sections = document.querySelectorAll('.movie-list');
 
@@ -45,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
 
       document.getElementById(category).style.display = 'block';
+      displayMovies(movies[category]); // Display movies for the selected category
     });
   });
 });
