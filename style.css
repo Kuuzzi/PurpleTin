@@ -1,4 +1,4 @@
-/* style.css */
+/* General Body Styles */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -6,30 +6,36 @@ body {
   color: #fff;
 }
 
+/* Header Styles */
 header {
   background-color: #2e0f46;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 15px 30px;
+  position: relative;
 }
 
+/* Logo Container Styles */
 .logo-container {
   display: flex;
   align-items: center;
 }
 
+/* Logo Text Styles */
 .logo {
   font-size: 1.8em;
   font-weight: bold;
   color: #c089ff;
 }
 
+/* Navigation Styles */
 nav {
   display: flex;
   align-items: center;
 }
 
+/* Navigation Link Styles */
 .nav-left a {
   margin-left: 20px;
   text-decoration: none;
@@ -37,16 +43,65 @@ nav {
   transition: color 0.3s ease;
 }
 
+/* Navigation Link Hover Styles */
 .nav-left a:hover {
   color: #fff;
 }
 
+/* Search Container Styles */
+.search-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Search Form Styles */
+#search-form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* Search Input Styles */
+#search-input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  flex: 1;
+  width: 100%;
+}
+
+/* Search Button Styles */
+#search-button {
+  padding: 0.5rem;
+  font-size: 1rem;
+  background-color: #5cb85c;
+  color: white;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+/* Search Button Hover Styles */
+#search-button:hover {
+  background-color: #4cae4c;
+}
+
+/* Movie List Styles */
 .movie-list ul {
   list-style: none;
   padding: 0;
   margin: 20px;
 }
 
+/* Movie List Item Styles */
 .movie-list li {
   background-color: #2c1a40;
   margin-bottom: 10px;
@@ -55,11 +110,13 @@ nav {
   color: #fff;
 }
 
+/* Link Styles */
 a {
   color: #c089ff;
   text-decoration: none;
 }
 
+/* Link Hover Styles */
 a:hover {
   text-decoration: underline;
 }
