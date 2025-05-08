@@ -25,6 +25,24 @@ header {
   color: #c089ff;
 }
 
+.social-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 15px;
+}
+
+.social-links a {
+  color: #3b5998; /* Facebook blue color */
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: #fff;
+}
+
 nav {
   display: flex;
   align-items: center;
@@ -121,6 +139,10 @@ a:hover {
     margin-bottom: 15px;
   }
 
+  .social-links {
+    margin-bottom: 15px;
+  }
+
   .nav-center {
     display: flex;
     flex-direction: column;
@@ -157,6 +179,10 @@ a:hover {
 
   .logo {
     font-size: 1.5em;
+  }
+
+  .social-links a {
+    font-size: 0.9rem;
   }
 
   .nav-center a {
