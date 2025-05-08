@@ -19,6 +19,15 @@
           <button type="submit" id="search-button">Search</button>
         </form>
       </div>
+      <div class="nav-center">
+        <a href="#movies">Movies</a>
+        <a href="#cartoons">Cartoons</a>
+        <a href="#tagalog">Tagalog Movies</a>
+        <a href="#tvseries">TV Series</a>
+        <a href="about.html">About Us</a>
+        <a href="disclaimer.html">Disclaimer</a>
+        <a href="contacts.html">Contacts</a>
+      </div>
     </nav>
   </header>
 
@@ -115,6 +124,11 @@
           sections.forEach(section => {
             section.style.display = 'none';
           });
+
+          if (category === 'about' || category === 'disclaimer' || category === 'contacts') {
+            window.location.href = `/${category}.html`;
+            return;
+          }
 
           document.getElementById(category).style.display = 'block';
           currentCategory = category;
