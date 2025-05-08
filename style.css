@@ -77,6 +77,16 @@ nav {
   background-color: #7b4397; /* Darker purple on hover */
 }
 
+.category-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.category-container a {
+  margin: 0 10px;
+}
+
 .movie-list ul {
   list-style: none;
   padding: 0;
