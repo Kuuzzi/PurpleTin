@@ -1,166 +1,212 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PurpleTin - Download Movies</title>
-  <link rel="icon" href="favicon.png" type="image/x-icon">
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <header>
-    <div class="logo-container">
-      <div class="logo">PurpleTin 🌷</div>
-    </div>
-    <nav>
-      <div class="search-container">
-        <form id="search-form">
-          <input type="text" id="search-input" placeholder="Search for movies...">
-          <button type="submit" id="search-button">Search</button>
-        </form>
-      </div>
-    </nav>
-  </header>
+/* style.css */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #0d0b1a;
+  color: #fff;
+}
 
-  <div class="social-links">
-    <a href="https://www.facebook.com/profile.php?id=61576204132983" target="_blank">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1200px-Facebook_Logo_%282019%29.png" alt="Facebook" width="20" height="20">
-      <span>Visit Us Here</span>
-    </a>
-    <a href="https://www.threads.com/@purpleetinn" target="_blank">
-      <img src="https://th.bing.com/th/id/OIP.FJ2rxJYdlVhRJ2kGR9-g6QHaHa?o=7&cb=iwp1rm=3&rs=1&pid=ImgDetMain" alt="Threads" width="20" height="20">
-      <span>Visit Us Here</span>
-    </a>
-    <a href="https://www.instagram.com/purpleetinn/" target="_blank">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/1024px-Instagram_logo_2016.svg.png" alt="Instagram" width="20" height="20">
-      <span>Visit Us Here</span>
-    </a>
-  </div>
+header {
+  background-color: #4b0082; /* Header background color */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+}
 
-  <div class="category-container">
-    <div class="nav-center">
-        <a href="#movies">Movies</a>
-        <a href="#cartoons">Cartoons</a>
-        <a href="#tagalog">Tagalog Movies</a>
-        <a href="#tvseries">TV Series</a>
-    </div>
-  </div>
+.logo-container {
+  display: flex;
+  align-items: center;
+}
 
-  <section id="movies" class="movie-list">
-    <ul id="movieContainer-movies">
-      <li><a href="https://pastepeso.com/TheOldWay" target="_blank">The Old Way 2025</a></li>
-      <li><a href="http://pastepeso.com/TheMonkey" target="_blank">The Monkey 2025</a></li>
-      <li><a href="http://pastepeso.com/SilentZone" target="_blank">Silent Zone 2025</a></li>
-      <li><a href="http://pastepeso.com/Exterritorial" target="_blank">Exterritorial 2025</a></li>
-      <li><a href="http://pastepeso.com/DeathOfaUnicorn" target="_blank">Death Of A Unicorn 2025</a></li>
-      <li><a href="http://pastepeso.com/AWorkingMan" target="_blank">A Working Man 2025</a></li>
-      <li><a href="http://pastepeso.com/Minecraftmovie" target="_blank">A Minecraft Movie 2025</a></li>
-      <!-- Add more movies here -->
-    </ul>
-  </section>
+.logo {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #c089ff;
+}
 
-  <section id="cartoons" class="movie-list" style="display:none;">
-    <ul id="movieContainer-cartoons">
-      <li><a href="http://pastepeso.com/TheGarfield" target="_blank">The Garfield Movie 2024</a></li>
-      <li><a href="http://pastepeso.com/SavingBKN" target="_blank">Saving Bikini Bottom The Sandy Cheeks Movie 2024</a></li>
-      <li><a href="http://pastepeso.com/KungFuPanda4" target="_blank">Kung Fu Panda 4 2024</a></li>
-      <li><a href="http://pastepeso.com/Moana1080p" target="_blank">Moana 2016</a></li>
-      <li><a href="https://pastepeso.com/Moanamovie2" target="_blank">Moana 2 2024</a></li>
-      <li><a href="https://pastepeso.com/TrollsBandTogether" target="_blank">Trolls Band Together 2023</a></li>
-      <li><a href="https://pastepeso.com/TrollsHoliday" target="_blank">Trolls Holiday in Harmony 2021</a></li>
-      <li><a href="https://pastepeso.com/TrollsWorldTour" target="_blank">Trolls World Tour 2021</a></li>
-      <li><a href="https://pastepeso.com/Trolls480p" target="_blank">Trolls 2016</a></li>
-      <li><a href="http://pastepeso.com/InsideOutt" target="_blank">Inside Out 2015</a></li>
-      <li><a href="http://pastepeso.com/InsideOut2" target="_blank">Inside Out 2 2024</a></li>
-      <li><a href="http://pastepeso.com/Coco720p" target="_blank">Coco 2017</a></li>
-      <li><a href="http://pastepeso.com/Despicableme" target="_blank">Despicable Me</a></li>
-      <li><a href="http://pastepeso.com/Despicableme2" target="_blank">Despicable Me 2</a></li>
-      <li><a href="http://pastepeso.com/Despicableme3" target="_blank">Despicable Me 3</a></li>
-      <li><a href="http://pastepeso.com/Despicableme4" target="_blank">Despicable Me 4</a></li>
-      <li><a href="https://pastepeso.com/Frozen720p" target="_blank">Frozen</a></li>
-      <li><a href="https://pastepeso.com/Frozen2360p" target="_blank">Frozen 2</a></li>
-      <li><a href="https://pastepeso.com/FrozenFever" target="_blank">Frozen Fever</a></li>
-      <li><a href="https://pastepeso.com/olafffffff" target="_blank">Olaf's Frozen Adventure</a></li>
-      <!-- Add Cartoons list items -->
-    </ul>
-  </section>
+.social-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 15px;
+}
 
-  <section id="tagalog" class="movie-list" style="display:none;">
-    <ul id="movieContainer-tagalog">
-      <li><a href="https://pastepeso.com/lMe53DgC" target="_blank">Sampung Utos Kay Josh 2025</a></li>
-      <li><a href="https://pastepeso.com/FvNH0qZqR" target="_blank">Ang Babaeng Walang Pakiramdam 2021</a></li>
-      <li><a href="https://pastepeso.com/Seoulmeyt" target="_blank">Seoulmeyt 2024</a></li>
-      <li><a href="https://pastepeso.com/SangganoSanggago" target="_blank">Sanggano, Sanggago't, Sanggwapo 2 2021</a></li>
-      <li><a href="https://pastepeso.com/QzI8" target="_blank">Bantay Bahay 2024</a></li>
-      <li><a href="http://pastepeso.com/Mallari" target="_blank">Mallari 2023</a></li>
-      <li><a href="http://pastepeso.com/GuiltyPleasure" target="_blank">Guilty Pleasure 2024</a></li>
-      <li><a href="http://pastepeso.com/Thehowsofus" target="_blank">The How's Of Us 2018</a></li>
-      <li><a href="http://pastepeso.com/CrazyBeautiful" target="_blank">Crazy Beautiful You 2015</a></li>
-      <li><a href="http://pastepeso.com/HelloLoveGoodbye" target="_blank">Hello, Love, Goodbye</a></li>
-      <li><a href="http://pastepeso.com/helloloveagain" target="_blank">Hello, Love, Again</a></li>
-      <li><a href="http://pastepeso.com/DatingTheGangster" target="_blank">She's Dating The Gangster</a></li>
-      <!-- Add more Tagalog movies here -->
-    </ul>
-  </section>
+.social-links a {
+  display: flex;
+  align-items: center;
+  color: #3b5998; /* Facebook blue color */
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  margin-right: 10px;
+}
 
-  <section id="tvseries" class="movie-list" style="display:none;">
-    <ul id="movieContainer-tvseries">
-      <li><a href="https://pastepeso.com/HowToCheatDeath" target="_blank">How To Cheat Death Season 1</a></li>
-      <li><a href="https://pastepeso.com/TheWalkingDeadS1" target="_blank">The Walking Dead : Dead City Season 1</a></li>
-      <li><a href="https://pastepeso.com/WeakHeroClass" target="_blank">Weak Hero Class Season 1</a></li>
-      <li><a href="https://pastepeso.com/Youngsheldon1080p" target="_blank">Young Sheldon Season 1</a></li>
-      <li><a href="http://pastepeso.com/GeorgieAndMandyCompletes1" target="_blank">Georgie & Mandy's First Marriage Season 1</a></li>
-      <!-- Add TV Series list items -->
-    </ul>
-  </section>
-  
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const searchInput = document.getElementById('search-input');
-      const navLinks = document.querySelectorAll('.nav-center a');
-      const sections = document.querySelectorAll('.movie-list');
-      let currentCategory = 'movies';
+.social-links img {
+  margin-right: 5px;
+}
 
-      function getMovieContainer(category) {
-        return document.getElementById(`movieContainer-${category}`);
-      }
+.social-links a:hover {
+  color: #fff;
+}
 
-      function filterMovies(query, category) {
-        const movieContainer = getMovieContainer(category);
-        const movies = movieContainer.getElementsByTagName('li');
+nav {
+  display: flex;
+  align-items: center;
+}
 
-        for (let i = 0; i < movies.length; i++) {
-          const movieTitle = movies[i].textContent.toLowerCase();
-          if (movieTitle.includes(query)) {
-            movies[i].style.display = '';
-          } else {
-            movies[i].style.display = 'none';
-          }
-        }
-      }
+.nav-center a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #d9b3ff;
+  transition: color 0.3s ease;
+}
 
-      searchInput.addEventListener('input', function() {
-        const query = this.value.toLowerCase();
-        filterMovies(query, currentCategory);
-      });
+.nav-center a:hover {
+  color: #fff;
+}
 
-      navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          const category = this.getAttribute('href').substring(1);
+.search-container {
+  display: flex;
+  align-items: center;
+}
 
-          sections.forEach(section => {
-            section.style.display = 'none';
-          });
+#search-form {
+  display: flex;
+  align-items: center;
+}
 
-          document.getElementById(category).style.display = 'block';
-          currentCategory = category;
+#search-input {
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px 0 0 5px;
+  background-color: #581b83; /* Darker purple */
+  color: #fff;
+  flex: 1;
+  max-width: 500px;
+  margin-right: 5px;
+}
 
-          searchInput.value = '';
-          filterMovies('', currentCategory);
-        });
-      });
-    });
-  </script>
-</body>
-</html>
+#search-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #9370db; /* Lighter purple */
+  color: white;
+  border: none;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+}
+
+#search-button:hover {
+  background-color: #7b4397; /* Darker purple on hover */
+}
+
+.category-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.category-container a {
+  margin: 0 10px;
+}
+
+.movie-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px;
+}
+
+.movie-list li {
+  background-color: #2c1a40;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 8px;
+  color: #fff;
+}
+
+a {
+  color: #c089ff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .logo-container {
+    margin-bottom: 15px;
+  }
+
+  .social-links {
+    margin-bottom: 15px;
+  }
+
+  .nav-center {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-center a {
+    margin-left: 0;
+    margin-bottom: 10px;
+  }
+
+  .search-container {
+    width: 100%;
+  }
+
+  #search-input {
+    width: 100%;
+    max-width: none;
+  }
+
+  .movie-list ul {
+    margin: 10px 0;
+  }
+
+  .movie-list li {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 10px 15px;
+  }
+
+  .logo {
+    font-size: 1.5em;
+  }
+
+  .social-links a {
+    font-size: 0.9rem;
+  }
+
+  .nav-center a {
+    font-size: 0.9rem;
+  }
+
+  #search-input {
+    font-size: 0.9rem;
+  }
+
+  #search-button {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+  }
+
+  .movie-list li {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+}
