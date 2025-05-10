@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding-top: 80px; /* Space for header */
+            box-sizing: border-box;
+        }
+        header {
+            background-color: #4b0082;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px; /* Increased padding */
+            box-sizing: border-box;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            font-size: 1.2em; /* Increased font size */
+        }
+        header .logo {
+            font-weight: bold;
+            color: #c089ff;
+        }
+        header nav {
+            display: flex;
+            align-items: center;
+        }
+        header nav button {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+        .movie-portal {
+            width: 90%;
+            max-width: 600px; /* Increased max-width */
+            text-align: center;
+            border: 2px solid #5e00a6;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 100px; /* Adjust for header height */
+        }
+        .movie-image {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .download-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #5e00a6;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .download-button:hover {
+            background-color: #9400d3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">PurpleTin</div>
+        <nav>
+            <button onclick="history.back()">Back</button>
+        </nav>
+    </header>
+    <div id="movieDetails" class="movie-portal" style="display:none;">
+        <img src="" alt="Movie Poster" class="movie-image">
+        <a href="" class="download-button">Download Movie</a>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hash = window.location.hash.substring(1);
+            const movieDetails = document.getElementById('movieDetails');
+            const movies = {
+                'theoldway': {
+                    title: 'The Old Way 2025',
+                    image: 'https://th.bing.com/th/id/OIP.ukryF_q4IYOK5X-Mbf-msQHaK-?o=7&cb=iwp2rm=3&rs=1&pid=ImgDetMain',
+                    link: 'https://pastepeso.com/TheOldWay'
+                },
+                'themonkey': {
+                    title: 'The Monkey 2025',
+                    image: 'https://m.media-amazon.com/images/M/MV5BMDIxYzI0OGQtZTZmZS00ZDU5LWI0Y2YtNzc5ZTk2NzMwMDM0XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg',
+                    link: 'https://pastepeso.com/TheMonkey'
+                },
+                'silentzone': {
+                    title: 'Silent Zone 2025',
+                    image: 'https://th.bing.com/th/id/OIP.4lAb2sSBmXiWFBJpx68SOQHaKs?o=7&cb=iwp2rm=3&rs=1&pid=ImgDetMain',
+                    link: 'https://pastepeso.com/SilentZone'
+                },
+                'exterritorial': {
+                    title: 'Exterritorial 2025',
+                    image: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjBbvU2w-IKjY-31pRDdOrSBX0VrUaGUbC0W3h7UDMYssZMEBvNY4Sm69KNhMxhkWLrpinaI8b8XkIS7S2UOmMK_NM4FsI85p3CAN3ykZCn7MtA9SLORpEqeadphjPpmoZnBHr4wlxIpP2JSDaTBaTV6T8scA-MS9R9iZrpCowKvLzCWWfkx1CqfKwZKdzQ/s16000/Exterritorial%201.jpg',
+                    link: 'https://pastepeso.com/Exterritorial'
+                },
+                'thegarfield': {
+                    title: 'The Garfield Movie 2024',
+                    image: 'https://image.tmdb.org/t/p/original/p6AbOJvMQhBmffd0PIv0u8ghWeY.jpg',
+                    link: 'https://pastepeso.com/TheGarfield'
+                },
+                                'deathofaunicorn': {
+                    title: 'Death Of A Unicorn',
+                    image: 'https://th.bing.com/th/id/OIP.xclA_UdAtWWjPb4WIQUAoQHaK-?cb=iwp2&rs=1&pid=ImgDetMain',
+                    link: 'http://pastepeso.com/DeathOfaUnicorn'
+                },
+                               'aworkingman': {
+                    title: 'A Working Man',
+                    image: 'https://th.bing.com/th/id/OIP.lJiJXbRLertE9EQZ0LHitQHaK-?cb=iwp2&rs=1&pid=ImgDetMain',
+                    link: 'http://pastepeso.com/AWorkingMan'
+                },
+                               'aworkingman': {
+                    title: 'A Working Man',
+                    image: 'https://th.bing.com/th/id/OIP.lJiJXbRLertE9EQZ0LHitQHaK-?cb=iwp2&rs=1&pid=ImgDetMain',
+                    link: 'http://pastepeso.com/AWorkingMan'
+
+                 },
+                               'aminecraftmovie': {
+                    title: 'A Minecraft Movie',
+                    image: 'https://upload.wikimedia.org/wikipedia/en/6/66/A_Minecraft_Movie_poster.jpg',
+                    link: 'http://pastepeso.com/Minecraftmovie'
+
+                },
+                               'thor': {
+                    title: 'Thor',
+                    image: 'https://th.bing.com/th/id/OIP.Y_cWUqfW1ZzoW2sgG25CwAHaLH?cb=iwp2&rs=1&pid=ImgDetMain',
+                    link: 'https://pastepeso.com/Thor1080p'
+
+                 },
+                               'thorragnarok': {
+                    title: 'Thor Ragnarok',
+                    image: 'https://th.bing.com/th/id/OIP.wbG6EmdkKkjd8K8y74r9uAHaK-?cb=iwp2&rs=1&pid=ImgDetMain',
+                    link: 'https://pastepeso.com/ThorRagnarok1080p'
+
+                    },
+                               'thorloveandthunder': {
+                    title: 'Thor Love and Thunder',
+                    image: 'https://i.etsystatic.com/37166133/r/il/0f5b32/4226342298/il_fullxfull.4226342298_t0py.jpg',
+                    link: 'https://pastepeso.com/LoveAndThunder720p'
+
+                    },
+                               'thordarkworld': {
+                    title: 'Thor The Dark World',
+                    image: 'https://th.bing.com/th/id/R.e3fc7c130ab63b639ad921243ede546e?rik=ar9%2bxpu0KdZY%2fw&riu=http%3a%2f%2fimg1.wikia.nocookie.net%2f__cb20130906231737%2fmarveldatabase%2fimages%2f8%2f8e%2fThor_The_Dark_World_poster_006.jpg&ehk=jne6%2bwI3011j5VVqOViGFzEoBoBwTxCKn%2b2zFvomdSM%3d&risl=&pid=ImgRaw&r=0',
+                    link: 'https://pastepeso.com/ThorDarkWorld1080p'
+
+                  },
+                               'kungfupanda4': {
+                    title: 'Kung Fu Panda 4 2024<',
+                    image: 'https://m.media-amazon.com/images/M/MV5BZDY0YzI0OTctYjVhYy00MTVhLWE0NTgtYTRmYTBmOTE3YTViXkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_FMjpg_UX1000_.jpg',
+                    link: 'https://pastepeso.com/ThorDarkWorld1080p'
+
+                    },
+                               'moana': {
+                    title: '>Moana 2016<',
+                    image: 'https://2.bp.blogspot.com/-M2d2wKeqCvI/WDERrBba2HI/AAAAAAADhXw/pjJhAA9Ujp8v1y2LvlwRa3oNXiD43IYxQCLcB/s1600/tumblr_o8zxzmA4J01rstxmro1_1280.jpg',
+                    link: 'http://pastepeso.com/Moana1080p'
+
+                     },
+                               'moana2': {
+                    title: 'Moana 2 2024<',
+                    image: 'https://all.web.img.acsta.net/r_1250_x/img/12/bd/12bd7b8b4fd5e50cdc0764e15171fe21.jpg',
+                    link: 'https://pastepeso.com/Moanamovie2'
+
+                     },
+                               'trollsbandtogether': {
+                    title: 'Trolls Band Together 2023<',
+                    image: 'https://th.bing.com/th/id/OIP.l26Ucv1N9RXNmrrKR4ohxwHaK0?cb=iwp2&rs=1&pid=ImgDetMain',
+                    link: 'https://pastepeso.com/TrollsBandTogether'
+
+                     },
+                               'trollsholidayinharmony': {
+                    title: 'Trolls Holiday in Harmony 2021<',
+                    image: 'https://th.bing.com/th/id/OIP.oZl_6YBjYkYeO8q8E1qwkwHaJQ?cb=iwp2&rs=1&pid=ImgDetMain',
+                    link: 'https://pastepeso.com/TrollsHoliday'
+
+                     },
+                               'trollsworldtour': {
+                    title: 'Trolls World Tour 2021<',
+                    image: 'https://th.bing.com/th/id/OIP.97IejRc4Wga0FcSHe_hyWQHaLO?cb=iwp2&rs=1&pid=ImgDetMain',
+                    link: 'https://pastepeso.com/TrollsWorldTour'
+
+                     },
+                               'trolls': {
+                    title: 'Trolls 2016<',
+                    image: 'https://www.themoviedb.org/t/p/original/4DSBPtZz1I9OViSRM0u3GcYTY2w.jpg',
+                    link: 'https://pastepeso.com/Trolls480p'
+
+                     },
+                               'insideout': {
+                    title: 'Inside Out 2015<',
+                    image: 'https://www.earwolf.com/wp-content/uploads/2023/06/unspooled-inside-out.jpeg',
+                    link: 'http://pastepeso.com/InsideOutt'
+
+                     },
+                               'insideout2': {
+                    title: 'Inside Out 2 2024<',
+                    image: 'https://static1.srcdn.com/wordpress/wp-content/uploads/2023/11/inside-out-2-poster.jpg',
+                    link: 'http://pastepeso.com/InsideOut2'
+
+                     },
+                               'coco': {
+                    title: 'Coco 2017<',
+                    image: 'https://th.bing.com/th/id/OIP.GPIbva8dEP6Kllx-sj5ysAHaK-?o=7&cb=iwp2rm=3&rs=1&pid=ImgDetMain',
+                    link: 'http://pastepeso.com/Coco720p'
+
+                     },
+                               'despicableme': {
+                    title: 'Despicable Me<',
+                    image: 'https://www.themoviedb.org/t/p/original/uQtSPb7V9u6FlpMRvf4Bt5QK9Jg.jpg',
+                    link: 'http://pastepeso.com/Despicableme'
+
+                     },
+                               'despicablme2': {
+                    title: 'Kung Fu Panda 4 2024<',
+                    image: 'https://th.bing.com/th/id/OIP.eCDpyOWRrOt0AtBcKpNy_AHaLu?cb=iwp2&rs=1&pid=ImgDetMain',
+                    link: 'http://pastepeso.com/Despicableme2'
+
+                     },
+                               'despicableme3': {
+                    title: 'Kung Fu Panda 4 2024<',
+                    image: 'https://image.tmdb.org/t/p/original/6t3YWl7hrr88lCEFlGVqW5yV99R.jpg',
+                    link: 'http://pastepeso.com/Despicableme3'
+
+                     },
+                               'despicableme4': {
+                    title: 'Kung Fu Panda 4 2024<',
+                    image: 'https://i.etsystatic.com/25432943/r/il/6069ca/5786624824/il_fullxfull.5786624824_8mo2.jpg',
+                    link: 'http://pastepeso.com/Despicableme4'
+
+                     },
+                               'frozen': {
+                    title: 'Frozen<',
+                    image: 'https://th.bing.com/th/id/OIP.X9pVQPZs8CQuLc3XjQFDFgHaLH?cb=iwp2&rs=1&pid=ImgDetMain',
+                    link: 'https://pastepeso.com/Frozen720p'
+
+                     },
+                               'frozen2': {
+                    title: 'Frozen 2<',
+                    image: 'https://th.bing.com/th/id/OIP.f4Dl2N55TAQ8jCip66ZWhgHaLH?cb=iwp2&rs=1&pid=ImgDetMain',
+                    link: 'https://pastepeso.com/Frozen2360p'
+
+                     },
+                               'frozenfever': {
+                    title: 'Frozen Fever<',
+                    image: 'https://th.bing.com/th/id/OIP.SiJVETA4vU8rK4jV2UfLIQHaLf?cb=iwp2&rs=1&pid=ImgDetMain',
+                    link: 'https://pastepeso.com/FrozenFever'
+
+                     },
+                               'olafadventure': {
+                    title: 'Olaf's Frozen Adventure<',
+                    image: 'https://th.bing.com/th/id/OIP.7PUkE8FvmsqlepmXY-5nbgHaLH?cb=iwp2&rs=1&pid=ImgDetMain',
+                    link: 'https://pastepeso.com/olafffffff'
+                // Add more movies
+            };
+
+            if (movies[hash]) {
+                movieDetails.style.display = 'block';
+                movieDetails.querySelector('img').src = movies[hash].image;
+                movieDetails.querySelector('img').alt = movies[hash].title;
+                movieDetails.querySelector('.download-button').href = movies[hash].link;
+                movieDetails.querySelector('.download-button').textContent = `Download ${movies[hash].title}`;
+            } else {
+                movieDetails.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
